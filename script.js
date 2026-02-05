@@ -1,81 +1,76 @@
-// --- DATA CONFIGURATION ---
+// --- DATA CONFIGURATION (8 Images Logic) ---
 const data = {
     cow: {
         title: "A2 Gir Cow Ghee",
         desc: "Medicinal Grade. Golden Yellow. Good for Heart.",
-        img: "https://via.placeholder.com/400x400/f1c40f/fff?text=Cow+Ghee", // Yahan apni Cow Image link daalna
-        // Price Settings: [250ml, 500ml, 750ml, 1L]
-        mrp: [1200, 2300, 3400, 4500],   // Nakli MRP (Kata hua price)
-        sale: [1000, 2000, 3000, 4000],  // Asli Selling Price
-        // Razorpay Links (Paste your generated links inside quotes)
-        links: [
-            "LINK_COW_250",
-            "LINK_COW_500",
-            "LINK_COW_750",
-            "LINK_COW_1L"
-        ]
+        // 4 Images for 4 Sizes
+        imgs: [
+            "cow0.jpg", // 250ml
+            "cow1.jpg", // 500ml
+            "cow2.jpg", // 750ml
+            "cow3.jpg"  // 1L
+        ],
+        mrp: [1200, 2300, 3400, 4500],
+        sale: [1000, 2000, 3000, 4000],
+        // Razorpay Links (Baad mein yahan asli links daalna)
+        links: ["L1", "L2", "L3", "L4"] 
     },
     buffalo: {
         title: "Pure Buffalo Ghee",
-        desc: "High Fat. Creamy White. Best for Mithai.",
-        img: "https://via.placeholder.com/400x400/ecf0f1/333?text=Buffalo+Ghee", // Yahan apni Buffalo Image link daalna
-        // Price Settings: [250ml, 500ml, 750ml, 1L]
-        mrp: [700, 1300, 1900, 2500],    // Nakli MRP
-        sale: [500, 1000, 1500, 2000],   // Asli Selling Price
-        // Razorpay Links
-        links: [
-            "LINK_BUFF_250",
-            "LINK_BUFF_500",
-            "LINK_BUFF_750",
-            "LINK_BUFF_1L"
-        ]
+        desc: "High Fat. White Granular. Best for Cooking.",
+        imgs: [
+            "buff0.jpg", // 250ml
+            "buff1.jpg", // 500ml
+            "buff2.jpg", // 750ml
+            "buff3.jpg"  // 1L
+        ],
+        mrp: [700, 1300, 1900, 2500],
+        sale: [500, 1000, 1500, 2000],
+        links: ["L5", "L6", "L7", "L8"]
     }
 };
 
-let currentType = 'cow'; // Shuruat Cow se hogi
+let currentType = 'cow'; // Shuruat Cow se
 
-// --- SWITCH FUNCTION (Cow <-> Buffalo) ---
+// --- SWITCH FUNCTION ---
 function switchGhee(type) {
-    if(currentType === type) return; // Agar same button dabaya to kuch mat karo
+    if(currentType === type) return;
     currentType = type;
 
-    // Buttons Update
+    // Button Style Change
     document.getElementById('cow-btn').className = `sw-btn ${type==='cow' ? 'active' : ''}`;
     document.getElementById('buff-btn').className = `sw-btn ${type==='buffalo' ? 'active' : ''}`;
 
-    // Image Spin Animation
-    const img = document.getElementById('ghee-img');
-    img.classList.add('spin');
+    // Title Text Update
+    document.getElementById('title').innerText = data[type].title;
+    document.getElementById('desc').innerText = data[type].desc;
 
-    // Data Change after small delay
-    setTimeout(() => {
-        img.src = data[type].img;
-        document.getElementById('title').innerText = data[type].title;
-        document.getElementById('desc').innerText = data[type].desc;
-        updatePrice(); // Price update call
-        img.classList.remove('spin');
-    }, 300);
+    // Price Update call karo (Ye image bhi update karega)
+    updatePrice();
 }
 
-// --- PRICE UPDATE FUNCTION ---
+// --- UPDATE PRICE & IMAGE FUNCTION ---
 function updatePrice() {
-    const qtyIndex = document.getElementById('qty').value; // 0, 1, 2, or 3
+    const qtyIndex = document.getElementById('qty').value; // Value: 0, 1, 2, 3
     const product = data[currentType];
 
+    // 1. Image Update (Sabse Important)
+    // Ye code ab `imgs` list se sahi photo uthayega
+    document.getElementById('ghee-img').src = product.imgs[qtyIndex];
+
+    // 2. Price Update
     const mrp = product.mrp[qtyIndex];
     const sale = product.sale[qtyIndex];
     const link = product.links[qtyIndex];
 
-    // Screen par numbers change karo
     document.getElementById('mrp').innerText = "₹" + mrp;
     document.getElementById('price').innerText = "₹" + sale;
     document.getElementById('pay-link').href = link;
 
-    // Discount Math Calculation
+    // 3. Discount Update
     const discount = Math.round(((mrp - sale) / mrp) * 100);
     document.getElementById('disc').innerText = discount + "% OFF";
 }
 
-// First Load par run karo
+// Page Load hone par run karo
 updatePrice();
-
