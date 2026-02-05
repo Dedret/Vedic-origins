@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vedic Origins | Pure Desi Ghee</title>
+    
+    <link rel="stylesheet" href="style.css">
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="brand-header">
+        <h1 class="brand-name">Vedic Origins</h1>
+        <p class="tagline">HAND-CHURNED BILONA GHEE</p>
+    </div>
+
+    <div class="product-card">
+        <div class="switch-box">
+            <button class="sw-btn active" id="cow-btn" onclick="switchGhee('cow')">COW GHEE</button>
+            <button class="sw-btn" id="buff-btn" onclick="switchGhee('buffalo')">BUFFALO</button>
+        </div>
+
+        <div class="img-container">
+            <img id="ghee-img" src="https://via.placeholder.com/400x400/f1c40f/fff?text=Cow+Ghee" class="product-img" alt="Ghee Jar">
+        </div>
+
+        <div class="details">
+            <h2 id="title">A2 Gir Cow Ghee</h2>
+            <p id="desc" class="desc-text">Medicinal Grade. Golden Yellow. Good for Heart.</p>
+            
+            <div class="price-box">
+                <span id="mrp" class="mrp">₹4500</span>
+                <span id="price" class="sale">₹4000</span>
+                <span id="disc" class="badge">11% OFF</span>
+            </div>
+
+            <label class="qty-label">SELECT QUANTITY</label>
+            <select id="qty" onchange="updatePrice()">
+                <option value="0">250 ml (Trial)</option>
+                <option value="1">500 ml (Standard)</option>
+                <option value="2">750 ml (Value Pack)</option>
+                <option value="3">1 Litre (Family Jar)</option>
+            </select>
+
+            <a id="pay-link" href="#" target="_blank">
+                <button class="buy-btn">ORDER NOW <i class="fas fa-arrow-right"></i></button>
+            </a>
+            
+            <p class="secure-text"><i class="fas fa-lock"></i> Secure Payment via Razorpay</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
