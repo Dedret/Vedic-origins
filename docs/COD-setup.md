@@ -29,15 +29,24 @@ Response:
 ```
 
 ## Integration with checkout page
-To integrate with the existing `checkout.html` page, modify the `placeOrder()` function to call the Netlify function when COD payment method is selected:
+To integrate with the existing `checkout.html` page, you'll need to:
+
+1. **Add separate form fields** for city, state, and pincode in checkout.html
+2. **Modify the `placeOrder()` function** to call the Netlify function when COD payment method is selected
+
+Example integration code:
 
 ```javascript
 async function placeOrder() {
     const name = document.getElementById('name').value;
     const phone = document.getElementById('phone').value;
     const address = document.getElementById('address').value;
+    // Add these new fields to checkout.html:
+    const city = document.getElementById('city').value;
+    const state = document.getElementById('state').value;
+    const pincode = document.getElementById('pincode').value;
     
-    if(name === "" || phone === "" || address === "") {
+    if(name === "" || phone === "" || address === "" || city === "" || state === "" || pincode === "") {
         alert("Please fill all details first!");
         return;
     }
@@ -58,9 +67,9 @@ async function placeOrder() {
                     address: {
                         name: name,
                         line1: address,
-                        city: 'City',  // Parse from address field
-                        state: 'State', // Parse from address field
-                        pincode: '000000' // Parse from address field
+                        city: city,
+                        state: state,
+                        pincode: pincode
                     },
                     phone: phone,
                     notes: ''
@@ -72,7 +81,7 @@ async function placeOrder() {
                 alert(`✅ ORDER PLACED!\nOrder ID: ${result.orderId}\nAmount: ₹${result.total}`);
                 window.location.href = 'index.html';
             } else {
-                alert('Order failed: ' + result.body);
+                alert('Order failed: ' + (result.error || 'Unknown error'));
             }
         } catch(e) {
             alert('Error placing order: ' + e.message);

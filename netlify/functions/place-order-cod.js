@@ -2,7 +2,11 @@ const { createClient } = require('@supabase/supabase-js');
 
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
-    return { statusCode: 405, body: 'Method Not Allowed' };
+    return { 
+      statusCode: 405, 
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ error: 'Method Not Allowed' })
+    };
   }
 
   const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE);
@@ -10,10 +14,22 @@ exports.handler = async (event) => {
   try {
     const { items, address, phone, email, notes } = JSON.parse(event.body || '{}');
 
-    if (!items?.length) return { statusCode: 400, body: 'No items provided' };
+    if (!items?.length) return { 
+      statusCode: 400, 
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ error: 'No items provided' })
+    };
     const required = ['name', 'line1', 'city', 'state', 'pincode'];
-    if (!address || required.some((k) => !address[k])) return { statusCode: 400, body: 'Incomplete address' };
-    if (!phone) return { statusCode: 400, body: 'Phone required' };
+    if (!address || required.some((k) => !address[k])) return { 
+      statusCode: 400, 
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ error: 'Incomplete address' })
+    };
+    if (!phone) return { 
+      statusCode: 400, 
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ error: 'Phone required' })
+    };
 
     const currency = 'INR';
     const codFee = 200;
@@ -55,6 +71,10 @@ exports.handler = async (event) => {
     };
   } catch (e) {
     console.error('COD order error:', e);
-    return { statusCode: 500, body: 'Failed to create COD order' };
+    return { 
+      statusCode: 500, 
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ error: 'Failed to create COD order' })
+    };
   }
 };
