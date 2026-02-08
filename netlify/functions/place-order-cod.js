@@ -50,7 +50,10 @@ exports.handler = async (event) => {
     const { error: itemsErr } = await supabase.from('order_items').insert(lineItems);
     if (itemsErr) {
       // Cleanup: delete the order if items insertion fails
-      await supabase.from('orders').delete().eq('id', order.id);
+      const { error: cleanupErr } = await supabase.from('orders').delete().eq('id', order.id);
+      if (cleanupErr) {
+        console.error('Failed to cleanup order after items insertion failure:', cleanupErr);
+      }
       throw itemsErr;
     }
 
@@ -61,6 +64,10 @@ exports.handler = async (event) => {
     };
   } catch (e) {
     console.error('COD order error:', e);
-    return { statusCode: 500, body: 'Failed to create COD order' };
+    // Return appropriate error message based on error type
+    const errorMsg = e.message?.includes('duplicate') ? 'Duplicate order detected' :
+                     e.message?.includes('constraint') ? 'Invalid order data' :
+                     'Failed to create COD order. Please try again.';
+    return { statusCode: 500, body: errorMsg };
   }
 };

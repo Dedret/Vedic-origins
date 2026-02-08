@@ -48,7 +48,14 @@ async function placeOrderCOD(orderData) {
  * const basePrice = parseInt(rawPrice.replace(/[^0-9]/g, ''));
  * 
  * // Derive product ID from product name (example conversion)
- * const productId = productName.toLowerCase().replace(/\s+/g, '-').replace(/[()]/g, '');
+ * // NOTE: For production use, consider maintaining a product ID mapping or
+ * // passing the product ID explicitly from the product listing page
+ * const productId = productName
+ *   .toLowerCase()
+ *   .replace(/[^a-z0-9\s-]/g, '') // remove special characters
+ *   .replace(/\s+/g, '-')          // replace spaces with hyphens
+ *   .replace(/-+/g, '-')           // collapse multiple hyphens
+ *   .trim();
  * 
  * // When user clicks confirm button
  * async function confirmOrder() {
