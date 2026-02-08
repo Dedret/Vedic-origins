@@ -187,3 +187,32 @@ if (document.getElementById('mobile')) {
         }
     }
 }
+
+/* =========================================
+   PART 3: PROFILE PAGE LOGIC
+   Only runs if profile-container exists (Profile Page)
+   ========================================= */
+if (document.querySelector('.profile-container')) {
+    
+    // Track Order Functionality
+    window.trackOrder = function(orderDate, product) {
+        alert(`Tracking Order:\n\nProduct: ${product}\nOrdered: ${orderDate}\n\nStatus: Order is on the way! 🚚`);
+    }
+    
+    // Edit Address Functionality
+    window.editAddress = function() {
+        const newAddress = prompt("Enter new address:", "123, Village Road, Near Old Temple, Guna, Madhya Pradesh - 473001");
+        if(newAddress && newAddress.trim() !== "") {
+            alert("✅ Address Updated Successfully!");
+            // In real app, this would update the database
+        }
+    }
+    
+    // Logout Function (moved from inline to here)
+    window.logout = function() {
+        if(confirm("Are you sure you want to logout?")) {
+            alert("👋 Logged out successfully!");
+            window.location.href = "index.html";
+        }
+    }
+}
