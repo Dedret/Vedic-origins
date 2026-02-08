@@ -5,6 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Profile | Vedic Origins</title>
     
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Manage your Vedic Origins profile, track orders, update addresses, and view your order history.">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="canonical" href="https://vedicorigins.example/profile.html">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://vedicorigins.example/profile.html">
+    <meta property="og:title" content="My Profile | Vedic Origins">
+    <meta property="og:description" content="Manage your Vedic Origins profile and track your orders.">
+    <meta property="og:image" content="https://vedicorigins.example/cow0.jpg">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:url" content="https://vedicorigins.example/profile.html">
+    <meta name="twitter:title" content="My Profile | Vedic Origins">
+    <meta name="twitter:description" content="Manage your Vedic Origins profile and track your orders.">
+    
+    <!-- Favicon and Icons -->
+    <link rel="icon" type="image/svg+xml" href="/assets/icon.svg">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/icon-192.png">
+    <link rel="apple-touch-icon" href="/assets/icon-192.png">
+    <link rel="manifest" href="/manifest.webmanifest">
+    <meta name="theme-color" content="#d4af37">
+    
+    <!-- Preconnect for Performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    
     <link rel="stylesheet" href="style.css">
     
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -17,11 +47,11 @@
     </div>
 
     <nav class="navbar">
-        <div class="hamburger" id="hamburger" onclick="toggleSidebar()">
+        <button class="hamburger" id="hamburger" onclick="toggleSidebar()" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="sidebar">
             <span></span>
             <span></span>
             <span></span>
-        </div>
+        </button>
         <a href="index.html" style="text-decoration:none;"><div class="logo">Vedic Origins</div></a>
         <div class="nav-links">
             <a href="index.html">Home</a>

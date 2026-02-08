@@ -1,0 +1,32 @@
+{
+  "name": "Vedic Origins - Premium A2 Ghee",
+  "short_name": "Vedic Origins",
+  "description": "Hand-churned Bilona Ghee made from free-grazing cows. Pure, natural, and lab-tested A2 Ghee delivered to your doorstep.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f9f7f2",
+  "theme_color": "#d4af37",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "categories": ["food", "shopping", "health"],
+  "screenshots": []
+}

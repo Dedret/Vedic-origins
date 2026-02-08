@@ -272,6 +272,8 @@ h1, h2, h3 { font-family: 'Playfair Display', serif; }
     cursor: pointer;
     z-index: 1001;
     padding: 5px;
+    background: none;
+    border: none;
 }
 
 .hamburger span {
@@ -1100,6 +1102,11 @@ footer {
     margin: 20px 0;
 }
 
+.socials a {
+    text-decoration: none;
+    display: inline-block;
+}
+
 .socials i { 
     font-size: 1.5rem; 
     margin: 0 15px; 
@@ -1124,6 +1131,23 @@ footer {
 
 .socials i:nth-child(3):hover {
     animation: shake 0.5s ease;
+}
+
+.footer-links {
+    margin: 15px 0;
+    font-size: 0.9rem;
+}
+
+.footer-links a {
+    color: var(--gold);
+    text-decoration: none;
+    margin: 0 5px;
+    transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+    color: var(--white);
+    text-decoration: underline;
 }
 
 .copyright { 

@@ -1,0 +1,11 @@
+# Vedic Origins - robots.txt
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://vedicorigins.example/sitemap.xml
+
+# Disallow checkout and profile pages from indexing
+Disallow: /checkout.html
+Disallow: /profile.html
+Disallow: /login.html

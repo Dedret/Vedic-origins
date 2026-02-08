@@ -10,9 +10,12 @@ window.toggleSidebar = function() {
     const hamburger = document.getElementById('hamburger');
     
     if (sidebar && overlay && hamburger) {
-        sidebar.classList.toggle('active');
+        const isActive = sidebar.classList.toggle('active');
         overlay.classList.toggle('active');
         hamburger.classList.toggle('active');
+        
+        // Update aria-expanded for accessibility
+        hamburger.setAttribute('aria-expanded', isActive);
     }
 }
 
@@ -189,7 +192,7 @@ if (document.getElementById('ghee-img')) {
 
         const btn = document.getElementById('pay-link');
         if(btn) {
-            btn.href = checkoutLink;
+            btn.setAttribute('data-href', checkoutLink);
         }
     }
 
