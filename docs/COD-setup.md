@@ -3,6 +3,7 @@
 ## Environment variables (Netlify)
 - `SUPABASE_URL`: Your Supabase Project URL (looks like `https://xxxx.supabase.co`). See screenshots ![image5](image5).
 - `SUPABASE_SERVICE_ROLE`: Your Secret key (listed under API Keys → Secret keys, starts with `sb_secret_…`). See screenshots ![image6](image6) and ![image7](image7).
+- `COD_FEE` (optional): Cash on Delivery fee in smallest currency unit (default: 200 for ₹200). Set this to customize the COD fee.
 
 ## Deploy
 1. Merge this PR.

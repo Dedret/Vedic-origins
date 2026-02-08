@@ -47,6 +47,9 @@ async function placeOrderCOD(orderData) {
  * const rawPrice = params.get('price') || '0';
  * const basePrice = parseInt(rawPrice.replace(/[^0-9]/g, ''));
  * 
+ * // Derive product ID from product name (example conversion)
+ * const productId = productName.toLowerCase().replace(/\s+/g, '-').replace(/[()]/g, '');
+ * 
  * // When user clicks confirm button
  * async function confirmOrder() {
  *   const name = document.getElementById('name').value;
@@ -58,7 +61,7 @@ async function placeOrderCOD(orderData) {
  *   
  *   const orderData = {
  *     items: [{
- *       product_id: 'cow-ghee-1l', // or derive from product name
+ *       product_id: productId, // dynamically derived from product name
  *       name: productName,
  *       price: basePrice,
  *       qty: 1

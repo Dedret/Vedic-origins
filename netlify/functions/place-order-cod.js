@@ -1,5 +1,8 @@
 const { createClient } = require('@supabase/supabase-js');
 
+// Configuration constants
+const COD_FEE = Number(process.env.COD_FEE) || 200;
+
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: 'Method Not Allowed' };
@@ -16,9 +19,8 @@ exports.handler = async (event) => {
     if (!phone) return { statusCode: 400, body: 'Phone required' };
 
     const currency = 'INR';
-    const codFee = 200;
     const subtotal = items.reduce((sum, it) => sum + Number(it.price) * Number(it.qty || 1), 0);
-    const total = subtotal + codFee;
+    const total = subtotal + COD_FEE;
 
     const { data: order, error: orderErr } = await supabase
       .from('orders')
@@ -26,7 +28,7 @@ exports.handler = async (event) => {
         payment_method: 'cod',
         status: 'cod_pending',
         total,
-        cod_fee: codFee,
+        cod_fee: COD_FEE,
         currency,
         phone,
         email,
@@ -46,7 +48,11 @@ exports.handler = async (event) => {
       currency
     }));
     const { error: itemsErr } = await supabase.from('order_items').insert(lineItems);
-    if (itemsErr) throw itemsErr;
+    if (itemsErr) {
+      // Cleanup: delete the order if items insertion fails
+      await supabase.from('orders').delete().eq('id', order.id);
+      throw itemsErr;
+    }
 
     return {
       statusCode: 200,
