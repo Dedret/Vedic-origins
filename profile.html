@@ -43,7 +43,7 @@
                         <p>₹4000 <span class="badge" style="background:#eee; color:#333;">UPI</span></p>
                     </div>
                 </div>
-                <button class="track-btn">Track Order</button>
+                <button class="track-btn" onclick="trackOrder('8 Feb 2026', 'A2 Gir Cow Ghee (1 Litre)')">Track Order</button>
             </div>
 
             <div class="order-card">
@@ -58,7 +58,7 @@
                         <p>₹1000 <span class="badge" style="background:#eee; color:#333;">COD</span></p>
                     </div>
                 </div>
-                <button class="track-btn">Buy Again</button>
+                <button class="track-btn" onclick="window.location.href='index.html#shop'">Buy Again</button>
             </div>
         </div>
 
@@ -68,19 +68,13 @@
                 <p><strong>Home</strong></p>
                 <p>123, Village Road, Near Old Temple,</p>
                 <p>Guna, Madhya Pradesh - 473001</p>
-                <button class="edit-btn" style="margin-top:10px;">Edit Address</button>
+                <button class="edit-btn" style="margin-top:10px;" onclick="editAddress()">Edit Address</button>
             </div>
         </div>
 
     </div>
 
-    <script>
-        function logout() {
-            if(confirm("Are you sure you want to logout?")) {
-                window.location.href = "index.html";
-            }
-        }
-    </script>
+    <script src="script.js"></script>
 
 </body>
 </html>
