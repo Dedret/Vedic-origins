@@ -1,58 +1,46 @@
-// --- DATA CONFIGURATION (8 Images) ---
+// --- 1. DATA CONFIGURATION ---
+// Yahan aap Product ka Naam aur Daam change kar sakte ho
 const data = {
     cow: {
-        title: "A2 Gir Cow Ghee",
+        title: "Pure Desi Cow Ghee", // <-- Yahan naam badal lo agar chahiye to
         desc: "Medicinal Grade. Golden Yellow. Good for Heart.",
-        // 4 Images (250ml se 1L tak)
-        imgs: [
-            "cow0.jpg", 
-            "cow1.jpg", 
-            "cow2.jpg", 
-            "cow3.jpg"
-        ],
-        mrp: [1200, 2300, 3400, 4500],
-        sale: [1000, 2000, 3000, 4000],
-        links: ["L1", "L2", "L3", "L4"]
+        // 4 Images (250ml, 500ml, 750ml, 1L)
+        imgs: ["cow0.jpg", "cow1.jpg", "cow2.jpg", "cow3.jpg"],
+        mrp: [1200, 2300, 3400, 4500],   // Market Price
+        sale: [1000, 2000, 3000, 4000]   // Selling Price
     },
     buffalo: {
         title: "Pure Buffalo Ghee",
         desc: "High Fat. White Granular. Best for Cooking.",
-        // 4 Images (250ml se 1L tak)
-        imgs: [
-            "buff0.jpg", 
-            "buff1.jpg", 
-            "buff2.jpg", 
-            "buff3.jpg"
-        ],
+        imgs: ["buff0.jpg", "buff1.jpg", "buff2.jpg", "buff3.jpg"],
         mrp: [700, 1300, 1900, 2500],
-        sale: [500, 1000, 1500, 2000],
-        links: ["L5", "L6", "L7", "L8"]
+        sale: [500, 1000, 1500, 2000]
     }
 };
 
-let currentType = 'cow'; 
+let currentType = 'cow'; // Shuruat Cow se hogi
 
-// --- SWITCH FUNCTION (Animation ke saath) ---
+// --- 2. SWITCH GHEE TYPE (Animation ke saath) ---
 function switchGhee(type) {
     if(currentType === type) return;
 
-    // 1. Animation Shuru (Ghumne wala effect)
+    // Animation Shuru (Ghumne wala effect)
     const img = document.getElementById('ghee-img');
     img.classList.add('spin');
 
-    // 2. Buttons Turant Badlo
+    // Buttons ka color badlo
     document.getElementById('cow-btn').className = `sw-btn ${type==='cow' ? 'active' : ''}`;
     document.getElementById('buff-btn').className = `sw-btn ${type==='buffalo' ? 'active' : ''}`;
 
-    // 3. 300ms ka Intezaar (Taki photo ghumte waqt change ho)
+    // 300ms ka Intezaar (Jab tak photo ghum rahi hai)
     setTimeout(() => {
-        currentType = type; // Ab type change karo
+        currentType = type; 
 
-        // Text Update
+        // Text aur Description update karo
         document.getElementById('title').innerText = data[type].title;
         document.getElementById('desc').innerText = data[type].desc;
 
-        // Price aur Image Update call karo
+        // Price aur Image update call karo
         updatePrice();
 
         // Animation Roko
@@ -60,27 +48,42 @@ function switchGhee(type) {
     }, 300);
 }
 
-// --- UPDATE PRICE & IMAGE ---
+// --- 3. UPDATE PRICE & LINK GENERATOR (Main Logic) ---
 function updatePrice() {
+    // Dropdown se value nikalo (0, 1, 2, ya 3)
     const qtyIndex = document.getElementById('qty').value; 
     const product = data[currentType];
 
-    // Image Change (Quantity ke hisaab se)
+    // A. Image Update
     document.getElementById('ghee-img').src = product.imgs[qtyIndex];
 
-    // Price Logic
-    const mrp = product.mrp[qtyIndex];
-    const sale = product.sale[qtyIndex];
-    const link = product.links[qtyIndex];
+    // B. Price Update
+    const currentPrice = product.sale[qtyIndex];
+    document.getElementById('mrp').innerText = "₹" + product.mrp[qtyIndex];
+    document.getElementById('price').innerText = "₹" + currentPrice;
 
-    document.getElementById('mrp').innerText = "₹" + mrp;
-    document.getElementById('price').innerText = "₹" + sale;
-    document.getElementById('pay-link').href = link;
-
-    // Discount Math
-    const discount = Math.round(((mrp - sale) / mrp) * 100);
+    // C. Discount Badge Calculation
+    const discount = Math.round(((product.mrp[qtyIndex] - currentPrice) / product.mrp[qtyIndex]) * 100);
     document.getElementById('disc').innerText = discount + "% OFF";
+
+    // --- D. CHECKOUT LINK LOGIC (Magic Part) ---
+    
+    // Size ka naam pata karo
+    const sizeLabels = ["250ml", "500ml", "750ml", "1 Litre"];
+    const selectedSize = sizeLabels[qtyIndex];
+
+    // Full Product Name banao (Ex: Vedic Origins Pure Desi Cow Ghee - 1 Litre)
+    const fullName = `Vedic Origins ${product.title} - ${selectedSize}`;
+
+    // Link generate karo jo data lekar jayega
+    const checkoutLink = `checkout.html?product=${encodeURIComponent(fullName)}&price=${currentPrice}`;
+
+    // 'Order Now' button par ye link laga do
+    const btn = document.getElementById('pay-link');
+    if(btn) {
+        btn.href = checkoutLink;
+    }
 }
 
-// First Load
+// Page load hone par ek baar chalao
 updatePrice();
