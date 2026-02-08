@@ -39,6 +39,10 @@ h1, h2, h3 { font-family: 'Playfair Display', serif; }
     font-weight: bold; color: var(--gold); text-transform: uppercase; letter-spacing: 1px;
 }
 
+.nav-links {
+    display: flex; align-items: center;
+}
+
 .nav-links a { 
     text-decoration: none; color: var(--dark); margin-left: 25px; 
     font-weight: bold; font-size: 0.9rem; transition: 0.3s;
@@ -82,16 +86,15 @@ h1, h2, h3 { font-family: 'Playfair Display', serif; }
 
 /* --- IMAGE AREA (FIXED CIRCLE) --- */
 .img-container { 
-    height: 250px; /* Thoda adjust kiya taaki fit aaye */
+    height: 250px; 
     display: flex; align-items: center; justify-content: center; 
     perspective: 1000px; margin-bottom: 20px;
 }
 
-/* Ye rahi wo line jo missing thi 👇 */
 .product-img { 
     width: 220px; 
     height: 220px; 
-    border-radius: 50%;  /* YAHAN HAI MAGIC (CIRCLE) */
+    border-radius: 50%; 
     object-fit: cover; 
     border: 5px solid white; 
     box-shadow: 0 8px 20px rgba(0,0,0,0.15); 
@@ -150,12 +153,15 @@ footer { background: var(--dark); color: white; padding: 40px 20px; text-align: 
 /* --- MOBILE RESPONSIVE --- */
 @media (max-width: 768px) {
     .navbar { flex-direction: column; gap: 10px; padding: 15px; }
-    .nav-links { display: none; }
+    .nav-links { display: none; } /* CAUTION: This hides menu on mobile */
     .hero h1 { font-size: 2rem; }
     .hero { height: 50vh; }
     .product-card { width: 90%; margin: 0 auto; }
 }
-/* --- LOGIN PAGE STYLES --- */
+
+/* =========================================
+   LOGIN & PROFILE PAGE STYLES (NEW)
+   ========================================= */
 
 /* Login Container */
 .login-container {
@@ -168,7 +174,7 @@ footer { background: var(--dark); color: white; padding: 40px 20px; text-align: 
 .login-box {
     background: #ffffff; padding: 40px 30px; border-radius: 20px;
     width: 350px; text-align: center; margin-top: 60px;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.3); border-top: 5px solid #d4af37;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3); border-top: 5px solid var(--gold);
 }
 
 /* Tabs */
@@ -177,25 +183,25 @@ footer { background: var(--dark); color: white; padding: 40px 20px; text-align: 
     background: none; border: none; padding: 10px 20px;
     font-weight: bold; color: #aaa; cursor: pointer; transition: 0.3s; font-size: 1rem;
 }
-.active-tab { color: #d4af37; border-bottom: 3px solid #d4af37; }
+.active-tab { color: var(--gold); border-bottom: 3px solid var(--gold); }
 
 /* Input Fields */
 .input-group {
     display: flex; align-items: center; border: 1px solid #ccc;
     border-radius: 8px; padding: 5px 15px; margin-bottom: 15px; background: #fdfbf7;
 }
-.input-group i { color: #d4af37; margin-right: 10px; }
+.input-group i { color: var(--gold); margin-right: 10px; }
 .input-group input {
     border: none; outline: none; width: 100%; font-size: 1rem;
-    background: transparent; font-weight: bold; color: #1a1a1a;
+    background: transparent; font-weight: bold; color: var(--dark);
 }
 
 /* Buttons */
 .auth-btn {
-    width: 100%; padding: 14px; background: #1a1a1a; color: #d4af37;
+    width: 100%; padding: 14px; background: var(--dark); color: var(--gold);
     border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 10px;
 }
-.auth-btn:hover { background: #d4af37; color: white; }
+.auth-btn:hover { background: var(--gold); color: white; }
 .auth-btn:disabled { background: #ccc; cursor: not-allowed; opacity: 0.7; }
 
 /* OTP Inputs */
@@ -204,4 +210,67 @@ footer { background: var(--dark); color: white; padding: 40px 20px; text-align: 
     width: 50px; height: 50px; font-size: 1.5rem; text-align: center;
     font-weight: bold; border: 1px solid #ddd; border-radius: 10px; background: #f9f9f9;
 }
-.otp-box:focus { border-color: #d4af37; background: white; outline: none; }
+.otp-box:focus { border-color: var(--gold); background: white; outline: none; }
+
+/* --- PROFILE PAGE STYLES --- */
+.profile-container {
+    max-width: 600px;
+    margin: 100px auto 20px; /* Adjusted top margin for fixed navbar */
+    padding: 20px;
+}
+
+.profile-header {
+    margin-bottom: 30px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 20px;
+    text-align: center;
+}
+.profile-header h1 { color: var(--gold); margin: 0; font-size: 2rem; }
+.profile-header p { color: #666; margin-top: 5px; }
+
+/* Section Box */
+.section-box {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    margin-bottom: 25px;
+    border: 1px solid #eee;
+}
+.section-box h3 { margin-top: 0; color: var(--dark); border-bottom: 1px solid #f0f0f0; padding-bottom: 10px; margin-bottom: 15px; }
+.section-box h3 i { color: var(--gold); margin-right: 8px; }
+
+/* Order Card */
+.order-card {
+    border: 1px solid #eee;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 15px;
+    background: #fdfbf7;
+}
+.order-header {
+    display: flex; justify-content: space-between;
+    font-size: 0.8rem; color: #777;
+    margin-bottom: 10px;
+}
+.status { font-weight: bold; padding: 2px 8px; border-radius: 4px; }
+.delivered { background: #e8f5e9; color: #27ae60; }
+.shipped { background: #e3f2fd; color: #2980b9; }
+
+.order-body { display: flex; gap: 15px; align-items: center; }
+.order-body img { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; border: 1px solid #ddd; }
+.order-details h4 { margin: 0 0 5px 0; font-size: 1rem; color: #333; }
+.order-details p { margin: 0; font-weight: bold; color: #555; }
+
+.track-btn {
+    width: 100%; margin-top: 10px;
+    padding: 8px; background: white;
+    border: 1px solid var(--gold); color: var(--gold);
+    border-radius: 5px; cursor: pointer; font-weight: bold;
+    transition: 0.2s;
+}
+.track-btn:hover { background: var(--gold); color: white; }
+
+/* Address Card */
+.address-card { color: #555; line-height: 1.6; }
+.edit-btn { background: none; border: none; color: var(--gold); font-weight: bold; cursor: pointer; padding: 0; }
