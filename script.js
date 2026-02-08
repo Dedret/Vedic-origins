@@ -2,6 +2,90 @@
    PART 1: HOME PAGE LOGIC (Product & Price)
    Only runs if 'ghee-img' exists (Home Page)
    ========================================= */
+
+// Sidebar Toggle Function (Global)
+window.toggleSidebar = function() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    const hamburger = document.getElementById('hamburger');
+    
+    if (sidebar && overlay && hamburger) {
+        sidebar.classList.toggle('active');
+        overlay.classList.toggle('active');
+        hamburger.classList.toggle('active');
+    }
+}
+
+// Navbar Scroll Effect (Global)
+window.addEventListener('scroll', function() {
+    const navbar = document.querySelector('.navbar');
+    if (navbar) {
+        if (window.scrollY > 50) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+    }
+});
+
+// Intersection Observer for Scroll Animations (Global)
+if ('IntersectionObserver' in window) {
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+
+    // Observe elements when DOM is ready
+    document.addEventListener('DOMContentLoaded', function() {
+        const animatedElements = document.querySelectorAll('.p-step, .review-card, .section-box');
+        animatedElements.forEach(el => {
+            if (!el.style.opacity) {
+                observer.observe(el);
+            }
+        });
+    });
+}
+
+// Ripple Effect for Buttons (Global)
+document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('ripple-container') || e.target.closest('.ripple-container')) {
+        const button = e.target.classList.contains('ripple-container') ? e.target : e.target.closest('.ripple-container');
+        const ripple = document.createElement('span');
+        const rect = button.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        const x = e.clientX - rect.left - size / 2;
+        const y = e.clientY - rect.top - size / 2;
+        
+        ripple.style.width = ripple.style.height = size + 'px';
+        ripple.style.left = x + 'px';
+        ripple.style.top = y + 'px';
+        ripple.classList.add('ripple-effect');
+        
+        button.appendChild(ripple);
+        
+        setTimeout(() => ripple.remove(), 600);
+    }
+});
+
+// Preloader (Global)
+window.addEventListener('load', function() {
+    const preloader = document.querySelector('.preloader');
+    if (preloader) {
+        setTimeout(() => {
+            preloader.classList.add('hidden');
+        }, 500);
+    }
+});
+
 if (document.getElementById('ghee-img')) {
 
     // 1. DATA CONFIGURATION
@@ -29,7 +113,18 @@ if (document.getElementById('ghee-img')) {
         if(currentType === type) return;
 
         const img = document.getElementById('ghee-img');
+        const switchBox = document.querySelector('.switch-box');
+        
         img.classList.add('spin');
+        
+        // Update switch box indicator
+        if (switchBox) {
+            if (type === 'buffalo') {
+                switchBox.classList.add('buffalo');
+            } else {
+                switchBox.classList.remove('buffalo');
+            }
+        }
 
         // Toggle Active Buttons
         document.getElementById('cow-btn').className = `sw-btn ${type==='cow' ? 'active' : ''}`;
@@ -38,9 +133,19 @@ if (document.getElementById('ghee-img')) {
         setTimeout(() => {
             currentType = type; 
             
-            // Update Text
-            document.getElementById('title').innerText = data[type].title;
-            document.getElementById('desc').innerText = data[type].desc;
+            // Update Text with animation
+            const title = document.getElementById('title');
+            const desc = document.getElementById('desc');
+            
+            title.style.opacity = '0';
+            desc.style.opacity = '0';
+            
+            setTimeout(() => {
+                title.innerText = data[type].title;
+                desc.innerText = data[type].desc;
+                title.style.opacity = '1';
+                desc.style.opacity = '1';
+            }, 200);
 
             // Update Price & Image
             window.updatePrice();
@@ -57,10 +162,19 @@ if (document.getElementById('ghee-img')) {
         // A. Image Update
         document.getElementById('ghee-img').src = product.imgs[qtyIndex];
 
-        // B. Price Update
+        // B. Price Update with animation
+        const priceElement = document.getElementById('price');
         const currentPrice = product.sale[qtyIndex];
-        document.getElementById('mrp').innerText = "₹" + product.mrp[qtyIndex];
-        document.getElementById('price').innerText = "₹" + currentPrice;
+        
+        priceElement.style.transform = 'scale(0.8)';
+        priceElement.style.opacity = '0';
+        
+        setTimeout(() => {
+            document.getElementById('mrp').innerText = "₹" + product.mrp[qtyIndex];
+            priceElement.innerText = "₹" + currentPrice;
+            priceElement.style.transform = 'scale(1)';
+            priceElement.style.opacity = '1';
+        }, 200);
 
         // C. Discount Badge
         const discount = Math.round(((product.mrp[qtyIndex] - currentPrice) / product.mrp[qtyIndex]) * 100);
@@ -91,23 +205,46 @@ if (document.getElementById('mobile')) {
 
     let currentMode = 'login'; 
 
-    // 1. SWITCH TABS
+    // 1. SWITCH TABS WITH ANIMATION
     window.switchTab = function(mode) {
         currentMode = mode;
         const btns = document.querySelectorAll('.tab-btn');
         const nameField = document.getElementById('name-field');
         const title = document.getElementById('form-title');
+        const authTabs = document.querySelector('.auth-tabs');
 
         if (mode === 'signup') {
             btns[0].classList.remove('active-tab');
             btns[1].classList.add('active-tab');
-            nameField.style.display = 'flex';
-            title.innerText = "Join Family";
+            if (authTabs) authTabs.classList.add('signup-active');
+            
+            // Slide in name field
+            if (nameField) {
+                nameField.style.display = 'flex';
+                nameField.style.animation = 'slideInLeft 0.5s ease';
+            }
+            
+            if (title) {
+                title.style.animation = 'fadeIn 0.5s ease';
+                title.innerText = "Join Family";
+            }
         } else {
             btns[1].classList.remove('active-tab');
             btns[0].classList.add('active-tab');
-            nameField.style.display = 'none';
-            title.innerText = "Welcome Back";
+            if (authTabs) authTabs.classList.remove('signup-active');
+            
+            // Slide out name field
+            if (nameField) {
+                nameField.style.animation = 'slideOutLeft 0.3s ease';
+                setTimeout(() => {
+                    nameField.style.display = 'none';
+                }, 300);
+            }
+            
+            if (title) {
+                title.style.animation = 'fadeIn 0.5s ease';
+                title.innerText = "Welcome Back";
+            }
         }
     }
 
@@ -131,31 +268,47 @@ if (document.getElementById('mobile')) {
         }
     }
 
-    // 3. SEND OTP
+    // 3. SEND OTP WITH LOADING ANIMATION
     window.sendOTP = function() {
         const mobile = document.getElementById('mobile').value;
-        const name = document.getElementById('fullname').value;
+        const name = document.getElementById('fullname') ? document.getElementById('fullname').value : '';
+        const btn = document.getElementById('get-otp-btn');
 
         if(currentMode === 'signup' && name === "") {
             alert("Please enter your Full Name first!");
             return;
         }
 
-        document.getElementById('get-otp-btn').innerText = "Sending...";
+        btn.innerText = "Sending...";
+        btn.classList.add('loading');
         
         setTimeout(() => {
-            document.getElementById('step-1').style.display = 'none';
-            document.getElementById('step-2').style.display = 'block';
+            const step1 = document.getElementById('step-1');
+            const step2 = document.getElementById('step-2');
+            
+            // Animate transition
+            step1.style.animation = 'slideOutLeft 0.4s ease';
+            setTimeout(() => {
+                step1.style.display = 'none';
+                step2.style.display = 'block';
+                step2.style.animation = 'slideInRight 0.4s ease';
+            }, 400);
+            
             document.getElementById('user-mobile').innerText = "+91 " + mobile;
             
             alert("Vedic Origins OTP: 1234");
-            document.getElementById('otp1').focus();
+            setTimeout(() => {
+                document.getElementById('otp1').focus();
+            }, 500);
         }, 1000);
     }
 
-    // 4. AUTO MOVE CURSOR
+    // 4. AUTO MOVE CURSOR WITH ANIMATION
     window.moveNext = function(current, nextID) {
+        // Add success animation to filled box
         if(current.value.length >= 1) {
+            current.classList.add('success');
+            
             if(nextID) {
                 document.getElementById(nextID).focus();
             } else {
@@ -165,7 +318,7 @@ if (document.getElementById('mobile')) {
         }
     }
 
-    // 5. VERIFY LOGIN
+    // 5. VERIFY LOGIN WITH ENHANCED FEEDBACK
     window.verifyLogin = function() {
         const o1 = document.getElementById('otp1').value;
         const o2 = document.getElementById('otp2').value;
@@ -174,16 +327,31 @@ if (document.getElementById('mobile')) {
         const code = o1 + o2 + o3 + o4;
 
         if(code === "1234") {
-            alert("✅ Success! Welcome to Vedic Origins.");
-            // REDIRECT TO PROFILE (Updated)
-            window.location.href = "profile.html"; 
+            // Success animation
+            document.querySelectorAll('.otp-box').forEach(box => {
+                box.classList.add('success');
+            });
+            
+            setTimeout(() => {
+                alert("✅ Success! Welcome to Vedic Origins.");
+                window.location.href = "profile.html"; 
+            }, 500);
         } else {
+            // Error animation
+            document.querySelectorAll('.otp-box').forEach(box => {
+                box.classList.add('error');
+                box.classList.remove('success');
+            });
+            
+            setTimeout(() => {
+                document.querySelectorAll('.otp-box').forEach(box => {
+                    box.classList.remove('error');
+                    box.value = "";
+                });
+                document.getElementById('otp1').focus();
+            }, 500);
+            
             alert("❌ Wrong OTP! Try 1234");
-            document.getElementById('otp1').value = "";
-            document.getElementById('otp2').value = "";
-            document.getElementById('otp3').value = "";
-            document.getElementById('otp4').value = "";
-            document.getElementById('otp1').focus();
         }
     }
 }

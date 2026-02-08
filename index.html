@@ -9,18 +9,41 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="preloader-logo">Vedic Origins</div>
+    </div>
 
     <nav class="navbar">
+        <div class="hamburger" id="hamburger" onclick="toggleSidebar()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
         <a href="index.html" style="text-decoration:none;"><div class="logo">Vedic Origins</div></a>
         <div class="nav-links">
             <a href="#shop">Shop</a>
             <a href="#process">Process</a>
             <a href="#reviews">Reviews</a>
-            <a href="login.html" style="text-decoration: none; color: #d4af37; border: 1px solid #d4af37; padding: 5px 15px; border-radius: 20px; transition: 0.3s;">
+            <a href="login.html" class="nav-icon profile" style="text-decoration: none; color: #d4af37; border: 1px solid #d4af37; padding: 5px 15px; border-radius: 20px; transition: 0.3s;">
                 <i class="fas fa-user"></i> Login
             </a>
         </div>
     </nav>
+
+    <!-- Sidebar Navigation -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+    <div class="sidebar" id="sidebar">
+        <ul class="sidebar-menu">
+            <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="#shop"><i class="fas fa-shopping-bag"></i> Shop</a></li>
+            <li><a href="#process"><i class="fas fa-leaf"></i> Our Process</a></li>
+            <li><a href="#reviews"><i class="fas fa-star"></i> Reviews</a></li>
+            <li><a href="login.html"><i class="fas fa-sign-in-alt"></i> Login / Sign Up</a></li>
+            <li><a href="#"><i class="fas fa-phone"></i> Contact Us</a></li>
+            <li><a href="#"><i class="fas fa-info-circle"></i> About Us</a></li>
+        </ul>
+    </div>
 
     <header class="hero">
         <div class="hero-content">
@@ -68,7 +91,7 @@
                 </select>
 
                 <a id="pay-link" href="#">
-                    <button class="buy-btn">ORDER NOW <i class="fas fa-arrow-right"></i></button>
+                    <button class="buy-btn ripple-container">ORDER NOW <i class="fas fa-arrow-right"></i></button>
                 </a>
                 
                 <p class="secure-text"><i class="fas fa-lock"></i> Secure Checkout</p>

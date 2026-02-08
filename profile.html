@@ -11,15 +11,39 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="preloader-logo">Vedic Origins</div>
+    </div>
 
     <nav class="navbar">
+        <div class="hamburger" id="hamburger" onclick="toggleSidebar()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
         <a href="index.html" style="text-decoration:none;"><div class="logo">Vedic Origins</div></a>
         <div class="nav-links">
             <a href="index.html">Home</a>
-            <a href="#shop">Shop</a>
-            <a href="index.html" onclick="logout()" style="color: #e74c3c;">Logout <i class="fas fa-sign-out-alt"></i></a>
+            <a href="index.html#shop">Shop</a>
+            <a href="javascript:void(0)" onclick="logout()" style="color: #e74c3c;">Logout <i class="fas fa-sign-out-alt"></i></a>
         </div>
     </nav>
+
+    <!-- Sidebar Navigation -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+    <div class="sidebar" id="sidebar">
+        <ul class="sidebar-menu">
+            <li><a href="profile.html"><i class="fas fa-user"></i> My Profile</a></li>
+            <li><a href="#orders"><i class="fas fa-box"></i> My Orders</a></li>
+            <li><a href="#"><i class="fas fa-heart"></i> Wishlist</a></li>
+            <li><a href="#"><i class="fas fa-gift"></i> Offers & Coupons</a></li>
+            <li><a href="#"><i class="fas fa-map-marker-alt"></i> Manage Addresses</a></li>
+            <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+            <li><a href="#"><i class="fas fa-question-circle"></i> Help & Support</a></li>
+            <li><a href="index.html" onclick="logout()" class="logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+    </div>
 
     <div class="profile-container">
         
