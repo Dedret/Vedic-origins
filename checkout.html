@@ -358,20 +358,12 @@
             </div>
         </div>
 
-        <label class="payment-label">Select Payment Method</label>
+        <label class="payment-label">Payment Method</label>
         
-        <label class="payment-option" onclick="calculateTotal('upi')">
+        <label class="payment-option" style="cursor: default; background: #fffdf5; border-color: #d4af37;">
             <div style="display:flex; align-items:center;">
-                <input type="radio" name="payment" value="upi" checked> 
-                <span>Pay Online / UPI</span>
-            </div>
-            <span class="badge badge-upi">Save ₹100</span>
-        </label>
-
-        <label class="payment-option" onclick="calculateTotal('cod')">
-            <div style="display:flex; align-items:center;">
-                <input type="radio" name="payment" value="cod"> 
-                <span>Cash on Delivery</span>
+                <input type="radio" name="payment" value="cod" checked disabled style="pointer-events: none;"> 
+                <span style="font-weight: bold;">Cash on Delivery (COD)</span>
             </div>
             <span class="badge badge-cod">+₹200 Fee</span>
         </label>
@@ -386,8 +378,8 @@
                 <span id="base-price">...</span>
             </div>
             <div class="row">
-                <span id="extra-label" class="green-text">Prepaid Discount:</span>
-                <span id="extra-amount" class="green-text">-₹100</span>
+                <span class="red-text">COD Charges:</span>
+                <span class="red-text">+₹200</span>
             </div>
             
             <div class="row total-row">
@@ -456,56 +448,11 @@
         document.getElementById('item-name').innerText = productName;
         document.getElementById('base-price').innerText = "₹" + basePrice;
 
-        let currentMethod = 'upi'; // Default start UPI se karenge
-        let finalAmount = 0;
+        // COD-only checkout - always add ₹200
+        let finalAmount = basePrice + 200;
 
-        // --- 2. CALCULATION LOGIC WITH ANIMATION (Bill Banao) ---
-        function calculateTotal(method) {
-            currentMethod = method;
-            
-            const extraLabel = document.getElementById('extra-label');
-            const extraAmount = document.getElementById('extra-amount');
-            const finalTotal = document.getElementById('final-total');
-            
-            if (method === 'upi') {
-                // UPI Logic: ₹100 Kam karo
-                finalAmount = basePrice - 100;
-                
-                // Animate change
-                extraLabel.style.animation = 'fadeIn 0.5s ease';
-                extraAmount.style.animation = 'fadeIn 0.5s ease';
-                
-                // Text Green Karo
-                extraLabel.innerText = "Prepaid Discount";
-                extraLabel.className = "green-text";
-                extraAmount.innerText = "-₹100";
-                extraAmount.className = "green-text";
-            
-            } else {
-                // COD Logic: ₹200 Jodo
-                finalAmount = basePrice + 200;
-                
-                // Animate change
-                extraLabel.style.animation = 'fadeIn 0.5s ease';
-                extraAmount.style.animation = 'fadeIn 0.5s ease';
-                
-                // Text Red Karo
-                extraLabel.innerText = "Delivery Charges";
-                extraLabel.className = "red-text";
-                extraAmount.innerText = "+₹200";
-                extraAmount.className = "red-text";
-            }
-
-            // Total Update Karo with animation
-            finalTotal.style.transform = 'scale(0.9)';
-            setTimeout(() => {
-                finalTotal.innerText = "₹" + finalAmount;
-                finalTotal.style.transform = 'scale(1)';
-            }, 200);
-        }
-
-        // Page load hote hi ek baar calculation chalao
-        calculateTotal('upi');
+        // Update display
+        document.getElementById('final-total').innerText = "₹" + finalAmount;
 
         // --- 3. ORDER BUTTON WITH VALIDATION AND MODAL ---
         async function placeOrder() {
