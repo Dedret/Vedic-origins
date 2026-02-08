@@ -324,9 +324,10 @@ async function placeCodOrder(cartItems, address, phone, email = '', notes = '') 
     
     return data;
   } catch (err) {
-    // Show error in a user-friendly way
+    // Show error message - using alert for now for simplicity
+    // TODO: Consider implementing an error modal for consistency
     const errorMsg = err.message || 'Network error. Please try again.';
-    alert(errorMsg); // Still using alert for errors, but can be improved with error modal
+    alert(errorMsg);
     return null;
   }
 }

@@ -473,10 +473,11 @@
             const pincode = document.getElementById('pincode').value.trim();
             const notes = document.getElementById('notes').value.trim();
             
-            // Build cart items (placeholder for now, can be enhanced later)
+            // Build cart items - use product ID from URL if available, otherwise generate from name
+            const productId = params.get('product_id') || productName.toLowerCase().replace(/[^a-z0-9]+/g, '-');
             const cartItems = [
                 { 
-                    product_id: 'cow-ghee-1l', 
+                    product_id: productId, 
                     name: productName, 
                     price: basePrice, 
                     qty: 1 
@@ -484,12 +485,13 @@
             ];
             
             // Build address object
+            // Note: State defaults to 'Maharashtra' - can be enhanced with a state selector field
             const address = {
                 name: name,
                 line1: area,
                 landmark: landmark,
                 city: city,
-                state: 'Maharashtra', // Default state, can be enhanced later
+                state: params.get('state') || 'Maharashtra', // Use state from URL or default
                 pincode: pincode
             };
 
