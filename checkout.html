@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout | Vedic Origins</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body { background: #f9f7f2; font-family: 'Lato', sans-serif; padding: 20px; text-align: center; color: #1a1a1a; }
+        
+        .container { 
+            max-width: 450px; 
+            margin: 0 auto; 
+            background: white; 
+            padding: 25px; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+            border: 1px solid #d4af37; 
+        }
+        
+        h2 { font-family: 'Playfair Display', serif; color: #d4af37; margin-top: 0; border-bottom: 1px solid #eee; padding-bottom: 15px; }
+
+        /* Form Inputs */
+        input, textarea { 
+            width: 100%; 
+            padding: 12px; 
+            margin: 8px 0; 
+            border: 1px solid #ddd; 
+            border-radius: 8px; 
+            box-sizing: border-box; 
+            font-family: inherit;
+        }
+        
+        /* Payment Options (Radio Buttons) */
+        .payment-label { font-weight: bold; text-align: left; display: block; margin-top: 15px; margin-bottom: 5px; }
+        
+        .payment-option { 
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 15px; margin: 10px 0; border: 1px solid #ddd; border-radius: 10px; 
+            cursor: pointer; transition: 0.2s; background: #fff;
+        }
+        .payment-option:hover { border-color: #d4af37; background: #fffdf5; }
+        .payment-option input { width: auto; margin-right: 10px; }
+        
+        /* Badges */
+        .badge { font-size: 0.75rem; padding: 3px 8px; border-radius: 5px; font-weight: bold; }
+        .badge-cod { background: #ffebee; color: #c0392b; } /* Red for Fees */
+        .badge-upi { background: #e8f5e9; color: #27ae60; } /* Green for Discount */
+
+        /* Bill Summary Box */
+        .summary-box { 
+            background: #fff8e1; 
+            border: 1px dashed #d4af37; 
+            padding: 15px; 
+            border-radius: 10px; 
+            text-align: left; 
+            margin-top: 20px; 
+        }
+        .row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.95rem; color: #555; }
+        .total-row { 
+            border-top: 1px solid #ccc; 
+            padding-top: 10px; 
+            font-weight: bold; 
+            color: #1a1a1a; 
+            font-size: 1.3rem; 
+            margin-top: 10px; 
+        }
+        
+        .green-text { color: #27ae60; font-weight: bold; }
+        .red-text { color: #c0392b; font-weight: bold; }
+
+        /* Confirm Button */
+        .confirm-btn { 
+            background: #1a1a1a; 
+            color: #d4af37; 
+            width: 100%; 
+            padding: 18px; 
+            border: none; 
+            border-radius: 10px; 
+            font-weight: bold; 
+            font-size: 1.1rem; 
+            cursor: pointer; 
+            margin-top: 15px; 
+            transition: 0.3s; 
+            border: 1px solid #d4af37;
+        }
+        .confirm-btn:hover { background: #d4af37; color: white; }
+        
+        .back-link { display: block; margin-top: 15px; color: #888; text-decoration: none; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Order Summary</h2>
+        
+        <div style="text-align: left;">
+            <label style="font-weight: bold; font-size: 0.9rem;">Shipping Details</label>
+            <input type="text" id="name" placeholder="Full Name" required>
+            <input type="tel" id="phone" placeholder="Mobile Number" required>
+            <textarea id="address" rows="2" placeholder="Complete Address (House No, Street, City)" required></textarea>
+        </div>
+
+        <label class="payment-label">Select Payment Method</label>
+        
+        <label class="payment-option" onclick="calculateTotal('upi')">
+            <div style="display:flex; align-items:center;">
+                <input type="radio" name="payment" value="upi" checked> 
+                <span>Pay Online / UPI</span>
+            </div>
+            <span class="badge badge-upi">Save ₹100</span>
+        </label>
+
+        <label class="payment-option" onclick="calculateTotal('cod')">
+            <div style="display:flex; align-items:center;">
+                <input type="radio" name="payment" value="cod"> 
+                <span>Cash on Delivery</span>
+            </div>
+            <span class="badge badge-cod">+₹200 Fee</span>
+        </label>
+
+        <div class="summary-box">
+            <div class="row">
+                <span>Item:</span>
+                <span id="item-name" style="font-weight: bold; color: #1a1a1a;">Loading...</span>
+            </div>
+            <div class="row">
+                <span>Base Price:</span>
+                <span id="base-price">...</span>
+            </div>
+            <div class="row">
+                <span id="extra-label" class="green-text">Prepaid Discount:</span>
+                <span id="extra-amount" class="green-text">-₹100</span>
+            </div>
+            
+            <div class="row total-row">
+                <span>Grand Total:</span>
+                <span id="final-total">...</span>
+            </div>
+        </div>
+
+        <button class="confirm-btn" onclick="placeOrder()">CONFIRM ORDER <i class="fas fa-arrow-right"></i></button>
+        
+        <a href="index.html" class="back-link">Cancel & Go Back</a>
+    </div>
+
+    <script>
+        // --- 1. DATA FETCHING (URL se data nikalo) ---
+        const params = new URLSearchParams(window.location.search);
+        const productName = params.get('product') || "Vedic Origins Ghee";
+        
+        // Price string se number nikalo (Agar "₹4000" hai to "4000" banega)
+        let rawPrice = params.get('price') || "0";
+        let basePrice = parseInt(rawPrice.replace(/[^0-9]/g, '')); 
+
+        // Screen par dikhao
+        document.getElementById('item-name').innerText = productName;
+        document.getElementById('base-price').innerText = "₹" + basePrice;
+
+        let currentMethod = 'upi'; // Default start UPI se karenge
+        let finalAmount = 0;
+
+        // --- 2. CALCULATION LOGIC (Bill Banao) ---
+        function calculateTotal(method) {
+            currentMethod = method;
+            
+            if (method === 'upi') {
+                // UPI Logic: ₹100 Kam karo
+                finalAmount = basePrice - 100;
+                
+                // Text Green Karo
+                document.getElementById('extra-label').innerText = "Prepaid Discount";
+                document.getElementById('extra-label').className = "green-text"; // CSS class
+                document.getElementById('extra-amount').innerText = "-₹100";
+                document.getElementById('extra-amount').className = "green-text";
+            
+            } else {
+                // COD Logic: ₹200 Jodo
+                finalAmount = basePrice + 200;
+                
+                // Text Red Karo
+                document.getElementById('extra-label').innerText = "Delivery Charges";
+                document.getElementById('extra-label').className = "red-text"; // CSS class
+                document.getElementById('extra-amount').innerText = "+₹200";
+                document.getElementById('extra-amount').className = "red-text";
+            }
+
+            // Total Update Karo
+            document.getElementById('final-total').innerText = "₹" + finalAmount;
+        }
+
+        // Page load hote hi ek baar calculation chalao
+        calculateTotal('upi');
+
+        // --- 3. ORDER BUTTON (Testing ke liye) ---
+        function placeOrder() {
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const address = document.getElementById('address').value;
+
+            if(name === "" || phone === "" || address === "") {
+                alert("Please fill all details first! (Naam aur Pata likho)");
+                return;
+            }
+
+            // Testing Alert (Database abhi nahi hai)
+            alert(`✅ ORDER PLACED!\n\nName: ${name}\nAmount to Pay: ₹${finalAmount}\nMode: ${currentMethod.toUpperCase()}\n\n(Yeh testing order hai)`);
+        }
+    </script>
+
+</body>
+</html>
+
