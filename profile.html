@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile | Vedic Origins</title>
+    
+    <link rel="stylesheet" href="style.css">
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="index.html" style="text-decoration:none;"><div class="logo">Vedic Origins</div></a>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="#shop">Shop</a>
+            <a href="index.html" onclick="logout()" style="color: #e74c3c;">Logout <i class="fas fa-sign-out-alt"></i></a>
+        </div>
+    </nav>
+
+    <div class="profile-container">
+        
+        <div class="profile-header">
+            <h1 style="color: #d4af37;">Namaste, Pure Soul 🙏</h1>
+            <p>+91 9876543210 <span style="background:#e8f5e9; color:#27ae60; padding:2px 8px; font-size:0.8rem; border-radius:10px;">Verified</span></p>
+        </div>
+
+        <div class="section-box">
+            <h3><i class="fas fa-box-open"></i> Your Orders</h3>
+            
+            <div class="order-card">
+                <div class="order-header">
+                    <span class="date">Ordered: 8 Feb 2026</span>
+                    <span class="status shipped">Shipped</span>
+                </div>
+                <div class="order-body">
+                    <img src="cow0.jpg" alt="Ghee" onerror="this.src='https://via.placeholder.com/60'">
+                    <div class="order-details">
+                        <h4>A2 Gir Cow Ghee (1 Litre)</h4>
+                        <p>₹4000 <span class="badge" style="background:#eee; color:#333;">UPI</span></p>
+                    </div>
+                </div>
+                <button class="track-btn">Track Order</button>
+            </div>
+
+            <div class="order-card">
+                <div class="order-header">
+                    <span class="date">Ordered: 15 Jan 2026</span>
+                    <span class="status delivered">Delivered</span>
+                </div>
+                <div class="order-body">
+                    <img src="buff0.jpg" alt="Ghee" onerror="this.src='https://via.placeholder.com/60'">
+                    <div class="order-details">
+                        <h4>Pure Buffalo Ghee (500ml)</h4>
+                        <p>₹1000 <span class="badge" style="background:#eee; color:#333;">COD</span></p>
+                    </div>
+                </div>
+                <button class="track-btn">Buy Again</button>
+            </div>
+        </div>
+
+        <div class="section-box">
+            <h3><i class="fas fa-map-marker-alt"></i> Saved Address</h3>
+            <div class="address-card">
+                <p><strong>Home</strong></p>
+                <p>123, Village Road, Near Old Temple,</p>
+                <p>Guna, Madhya Pradesh - 473001</p>
+                <button class="edit-btn" style="margin-top:10px;">Edit Address</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function logout() {
+            if(confirm("Are you sure you want to logout?")) {
+                window.location.href = "index.html";
+            }
+        }
+    </script>
+
+</body>
+</html>
+
