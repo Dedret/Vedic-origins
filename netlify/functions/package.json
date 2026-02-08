@@ -2,6 +2,7 @@
   "name": "netlify-functions",
   "private": true,
   "dependencies": {
-    "@supabase/supabase-js": "^2.47.5"
+    "@supabase/supabase-js": "^2.47.5",
+    "razorpay": "^2.9.2"
   }
 }

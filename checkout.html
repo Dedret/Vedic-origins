@@ -7,6 +7,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
     <link href="assets/css/modal.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     
     <style>
         :root {
@@ -360,15 +362,23 @@
 
         <label class="payment-label">Payment Method</label>
         
-        <label class="payment-option" style="cursor: default; background: #fffdf5; border-color: #d4af37;">
+        <label class="payment-option" id="cod-option" onclick="selectPaymentMethod('cod')">
             <div style="display:flex; align-items:center;">
-                <input type="radio" name="payment" value="cod" checked disabled style="pointer-events: none;"> 
+                <input type="radio" name="payment" value="cod" id="cod-radio"> 
                 <span style="font-weight: bold;">Cash on Delivery (COD)</span>
             </div>
             <span class="badge badge-cod">+₹200 Fee</span>
         </label>
+        
+        <label class="payment-option" id="prepaid-option" onclick="selectPaymentMethod('prepaid')">
+            <div style="display:flex; align-items:center;">
+                <input type="radio" name="payment" value="prepaid" id="prepaid-radio"> 
+                <span style="font-weight: bold;">Pay Online (Prepaid)</span>
+            </div>
+            <span class="badge badge-upi">No COD Fee</span>
+        </label>
 
-        <div class="summary-box">
+        <div class="summary-box" id="summary-box">
             <div class="row">
                 <span>Item:</span>
                 <span id="item-name" style="font-weight: bold; color: #1a1a1a;">Loading...</span>
@@ -427,6 +437,9 @@
         </div>
     </div>
 
+    <script src="assets/js/config.example.js"></script>
+    <script src="assets/js/auth.js"></script>
+    <script src="assets/js/cart.js"></script>
     <script src="assets/js/cod-order.js"></script>
     <script>
         // Preloader
@@ -436,29 +449,127 @@
             }, 500);
         });
 
-        // --- 1. DATA FETCHING (URL se data nikalo) ---
-        const params = new URLSearchParams(window.location.search);
-        const productName = params.get('product') || "Vedic Origins Ghee";
-        
-        // Price string se number nikalo (Agar "₹4000" hai to "4000" banega)
-        let rawPrice = params.get('price') || "0";
-        let basePrice = parseInt(rawPrice.replace(/[^0-9]/g, '')); 
+        // Global variables
+        let cartItems = [];
+        let currentPaymentMethod = 'prepaid'; // Default to prepaid (no COD fee)
+        let subtotal = 0;
+        let codFee = 0;
+        let finalAmount = 0;
 
-        // Screen par dikhao
-        document.getElementById('item-name').innerText = productName;
-        document.getElementById('base-price').innerText = "₹" + basePrice;
+        // Initialize checkout page
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Check if user is logged in
+            const session = await getSession();
+            if (!session) {
+                sessionStorage.setItem('redirectAfterLogin', window.location.href);
+                window.location.href = '/login.html';
+                return;
+            }
 
-        // COD-only checkout - always add ₹200
-        let finalAmount = basePrice + 200;
+            // Load cart items
+            cartItems = getCart();
+            
+            if (cartItems.length === 0) {
+                // Redirect to cart if empty
+                alert('Your cart is empty. Please add items before checkout.');
+                window.location.href = 'cart.html';
+                return;
+            }
 
-        // Update display
-        document.getElementById('final-total').innerText = "₹" + finalAmount;
+            // Calculate totals
+            subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            
+            // Set default payment method (prepaid)
+            document.getElementById('prepaid-radio').checked = true;
+            document.getElementById('prepaid-option').style.background = '#fffdf5';
+            document.getElementById('prepaid-option').style.borderColor = '#d4af37';
+            
+            updateSummary();
+            
+            // Add real-time validation
+            const fields = ['name', 'phone', 'email', 'landmark', 'area', 'city', 'pincode'];
+            fields.forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                if (field) {
+                    field.addEventListener('blur', function() {
+                        validateField(fieldId);
+                    });
+                    field.addEventListener('input', function() {
+                        if (field.classList.contains('invalid')) {
+                            validateField(fieldId);
+                        }
+                    });
+                }
+            });
+        });
 
-        // --- 3. ORDER BUTTON WITH VALIDATION AND MODAL ---
+        // Select payment method
+        function selectPaymentMethod(method) {
+            currentPaymentMethod = method;
+            
+            const codRadio = document.getElementById('cod-radio');
+            const prepaidRadio = document.getElementById('prepaid-radio');
+            const codOption = document.getElementById('cod-option');
+            const prepaidOption = document.getElementById('prepaid-option');
+            
+            if (method === 'cod') {
+                codRadio.checked = true;
+                prepaidRadio.checked = false;
+                codOption.style.background = '#fffdf5';
+                codOption.style.borderColor = '#d4af37';
+                prepaidOption.style.background = '';
+                prepaidOption.style.borderColor = '';
+                codFee = 200;
+            } else {
+                prepaidRadio.checked = true;
+                codRadio.checked = false;
+                prepaidOption.style.background = '#fffdf5';
+                prepaidOption.style.borderColor = '#d4af37';
+                codOption.style.background = '';
+                codOption.style.borderColor = '';
+                codFee = 0;
+            }
+            
+            updateSummary();
+        }
+
+        // Update summary display
+        function updateSummary() {
+            finalAmount = subtotal + codFee;
+            
+            const summaryBox = document.getElementById('summary-box');
+            
+            let itemsHtml = cartItems.map(item => `
+                <div class="row">
+                    <span>${item.name} (x${item.qty})</span>
+                    <span>₹${(item.price * item.qty).toLocaleString('en-IN')}</span>
+                </div>
+            `).join('');
+            
+            summaryBox.innerHTML = `
+                ${itemsHtml}
+                <div class="row">
+                    <span>Subtotal:</span>
+                    <span>₹${subtotal.toLocaleString('en-IN')}</span>
+                </div>
+                ${codFee > 0 ? `
+                <div class="row">
+                    <span class="red-text">COD Charges:</span>
+                    <span class="red-text">+₹${codFee}</span>
+                </div>
+                ` : ''}
+                <div class="row total-row">
+                    <span>Grand Total:</span>
+                    <span>₹${finalAmount.toLocaleString('en-IN')}</span>
+                </div>
+            `;
+        }
+
+        // Place order
         async function placeOrder() {
             // Validate all fields first
             if (!validateAllFields()) {
-                return; // Stop if validation fails
+                return;
             }
             
             const btn = document.querySelector('.confirm-btn');
@@ -473,27 +584,19 @@
             const pincode = document.getElementById('pincode').value.trim();
             const notes = document.getElementById('notes').value.trim();
             
-            // Build cart items - use product ID from URL if available, otherwise generate from name
-            const productId = params.get('product_id') || productName.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-            const cartItems = [
-                { 
-                    product_id: productId, 
-                    name: productName, 
-                    price: basePrice, 
-                    qty: 1 
-                }
-            ];
-            
             // Build address object
-            // Note: State defaults to 'Maharashtra' - can be enhanced with a state selector field
             const address = {
                 name: name,
                 line1: area,
                 landmark: landmark,
                 city: city,
-                state: params.get('state') || 'Maharashtra', // Use state from URL or default
+                state: 'India', // Can be made dynamic if needed
                 pincode: pincode
             };
+
+            // Get user ID if logged in
+            const user = await getCurrentUser();
+            const user_id = user ? user.id : null;
 
             // Show loading state
             const originalText = btn.innerHTML;
@@ -501,44 +604,164 @@
             btn.disabled = true;
 
             try {
-                // Call the Netlify function
-                const result = await placeCodOrder(cartItems, address, phone, email, notes);
-                
-                if (!result) {
-                    // Error already shown in placeCodOrder function
-                    btn.innerHTML = originalText;
-                    btn.disabled = false;
+                if (currentPaymentMethod === 'cod') {
+                    // COD order
+                    const result = await placeCodOrder(cartItems, address, phone, email, notes);
+                    
+                    if (result) {
+                        // Clear cart on success
+                        clearCart();
+                    } else {
+                        btn.innerHTML = originalText;
+                        btn.disabled = false;
+                    }
+                } else {
+                    // Prepaid order
+                    await placePrepaidOrder(cartItems, address, phone, email, notes, user_id);
                 }
-                // Success - modal is shown by placeCodOrder function
             } catch (error) {
                 console.error('Order placement error:', error);
                 btn.innerHTML = originalText;
                 btn.disabled = false;
-                alert('An error occurred. Please try again.');
+                showError('An error occurred. Please try again.');
             }
         }
-        
-        // Add real-time validation on blur
-        document.addEventListener('DOMContentLoaded', function() {
-            const fields = ['name', 'phone', 'email', 'landmark', 'area', 'city', 'pincode'];
-            
-            fields.forEach(fieldId => {
-                const field = document.getElementById(fieldId);
-                if (field) {
-                    field.addEventListener('blur', function() {
-                        validateField(fieldId);
-                    });
-                    
-                    // Also validate on input for immediate feedback
-                    field.addEventListener('input', function() {
-                        if (field.classList.contains('invalid')) {
-                            validateField(fieldId);
-                        }
-                    });
+
+        // Place prepaid order
+        async function placePrepaidOrder(items, address, phone, email, notes, user_id) {
+            try {
+                // Create order
+                const res = await fetch('/.netlify/functions/create-order-prepaid', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ items, address, phone, email, notes, user_id })
+                });
+                
+                const data = await res.json();
+                
+                if (!res.ok) {
+                    throw new Error(data?.error || 'Order creation failed');
                 }
-            });
-        });
-        
+                
+                // Open Razorpay checkout
+                const options = {
+                    key: data.keyId,
+                    amount: data.amount,
+                    currency: data.currency,
+                    name: 'Vedic Origins',
+                    description: 'Premium A2 Ghee',
+                    order_id: data.rzpOrderId,
+                    prefill: {
+                        name: address.name,
+                        email: email || '',
+                        contact: phone
+                    },
+                    theme: {
+                        color: '#d4af37'
+                    },
+                    handler: async function(response) {
+                        // Payment successful - verify on server
+                        await verifyPayment(response, data.orderId);
+                    },
+                    modal: {
+                        ondismiss: function() {
+                            // Payment cancelled
+                            const btn = document.querySelector('.confirm-btn');
+                            btn.innerHTML = 'CONFIRM ORDER <i class="fas fa-arrow-right"></i>';
+                            btn.disabled = false;
+                            showError('Payment cancelled. Please try again.');
+                        }
+                    }
+                };
+                
+                const rzp = new Razorpay(options);
+                rzp.open();
+                
+            } catch (err) {
+                console.error('Prepaid order error:', err);
+                const btn = document.querySelector('.confirm-btn');
+                btn.innerHTML = 'CONFIRM ORDER <i class="fas fa-arrow-right"></i>';
+                btn.disabled = false;
+                showError(err.message || 'Failed to create order. Please try again.');
+            }
+        }
+
+        // Verify Razorpay payment
+        async function verifyPayment(response, orderId) {
+            try {
+                const res = await fetch('/.netlify/functions/verify-razorpay', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        razorpay_order_id: response.razorpay_order_id,
+                        razorpay_payment_id: response.razorpay_payment_id,
+                        razorpay_signature: response.razorpay_signature,
+                        order_id: orderId
+                    })
+                });
+                
+                const data = await res.json();
+                
+                if (!res.ok || !data.verified) {
+                    throw new Error('Payment verification failed');
+                }
+                
+                // Clear cart
+                clearCart();
+                
+                // Show success modal
+                openModal({
+                    customerName: document.getElementById('name').value,
+                    orderId: data.orderId,
+                    total: data.total,
+                    mode: 'Prepaid (Online)'
+                });
+                
+            } catch (err) {
+                console.error('Payment verification error:', err);
+                showError('Payment verification failed. Please contact support with order ID: ' + orderId);
+            }
+        }
+
+        // Show error message
+        function showError(message) {
+            // Use modal for errors too
+            const modal = document.getElementById('order-modal');
+            if (modal) {
+                const header = modal.querySelector('.modal-header');
+                const icon = modal.querySelector('.success-icon');
+                const title = modal.querySelector('#modal-title');
+                const primaryBtn = modal.querySelector('#modal-primary-btn');
+                
+                // Change to error styling
+                header.style.background = 'linear-gradient(135deg, #e74c3c 0%, #c0392b 100%)';
+                icon.textContent = '✕';
+                title.textContent = 'Order Failed';
+                
+                document.getElementById('modal-customer-name').textContent = '-';
+                document.getElementById('modal-order-id').textContent = '-';
+                document.getElementById('modal-amount').textContent = message;
+                document.getElementById('modal-payment-mode').textContent = '-';
+                
+                primaryBtn.textContent = 'Try Again';
+                primaryBtn.onclick = function() {
+                    closeModal();
+                    // Reset modal styling
+                    header.style.background = '';
+                    icon.textContent = '✓';
+                    title.textContent = 'Order Placed Successfully!';
+                    primaryBtn.textContent = 'Go to Thank You Page';
+                    primaryBtn.onclick = goToThankYou;
+                };
+                
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            } else {
+                alert(message);
+            }
+        }
+
+        // Field validation
         function validateField(fieldId) {
             let result;
             const value = document.getElementById(fieldId)?.value;
@@ -569,14 +792,41 @@
             
             if (result) {
                 if (!result.valid) {
-                    showError(fieldId, result.message);
+                    showFieldError(fieldId, result.message);
                 } else {
-                    clearError(fieldId);
+                    clearFieldError(fieldId);
                 }
+            }
+        }
+
+        function showFieldError(fieldId, message) {
+            const field = document.getElementById(fieldId);
+            const errorElement = document.getElementById(fieldId + '-error');
+            
+            if (field) {
+                field.classList.add('invalid');
+            }
+            
+            if (errorElement) {
+                errorElement.textContent = message;
+                errorElement.style.display = 'block';
+            }
+        }
+
+        function clearFieldError(fieldId) {
+            const field = document.getElementById(fieldId);
+            const errorElement = document.getElementById(fieldId + '-error');
+            
+            if (field) {
+                field.classList.remove('invalid');
+            }
+            
+            if (errorElement) {
+                errorElement.textContent = '';
+                errorElement.style.display = 'none';
             }
         }
     </script>
 
 </body>
 </html>
-
