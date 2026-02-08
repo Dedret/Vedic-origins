@@ -6,6 +6,7 @@
     <title>Checkout | Vedic Origins</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <link href="assets/css/modal.css" rel="stylesheet">
     
     <style>
         :root {
@@ -82,7 +83,7 @@
         input, textarea { 
             width: 100%; 
             padding: 12px; 
-            margin: 8px 0; 
+            margin: 8px 0 4px 0; 
             border: 1px solid #ddd; 
             border-radius: 8px; 
             box-sizing: border-box; 
@@ -90,11 +91,44 @@
             transition: all 0.3s ease;
         }
         
+        input.invalid, textarea.invalid {
+            border-color: #e74c3c;
+            background-color: #fff5f5;
+        }
+        
         input:focus, textarea:focus {
             border-color: var(--gold);
             box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
             outline: none;
             transform: translateY(-2px);
+        }
+        
+        label {
+            display: block;
+            font-weight: 600;
+            text-align: left;
+            margin-top: 12px;
+            margin-bottom: 4px;
+            color: var(--dark);
+            font-size: 0.9rem;
+        }
+        
+        label .required {
+            color: #e74c3c;
+            margin-left: 2px;
+        }
+        
+        .error-message {
+            display: none;
+            color: #e74c3c;
+            font-size: 0.85rem;
+            margin-top: 4px;
+            margin-bottom: 8px;
+            text-align: left;
+        }
+        
+        .form-group {
+            margin-bottom: 8px;
         }
         
         /* Payment Options (Radio Buttons) */
@@ -197,6 +231,19 @@
             overflow: hidden;
         }
         
+        .confirm-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            background: #ccc;
+            border-color: #999;
+            color: #666;
+        }
+        
+        .confirm-btn:disabled:hover {
+            transform: none;
+            box-shadow: none;
+        }
+        
         .confirm-btn::before {
             content: '';
             position: absolute;
@@ -210,12 +257,12 @@
             transition: width 0.6s ease, height 0.6s ease;
         }
         
-        .confirm-btn:hover::before {
+        .confirm-btn:not(:disabled):hover::before {
             width: 500px;
             height: 500px;
         }
         
-        .confirm-btn:hover { 
+        .confirm-btn:not(:disabled):hover { 
             background: #d4af37; 
             color: white;
             transform: translateY(-3px);
@@ -248,13 +295,67 @@
     </div>
 
     <div class="container">
-        <h2>Order Summary</h2>
+        <h2>Checkout</h2>
         
         <div style="text-align: left;">
-            <label style="font-weight: bold; font-size: 0.9rem;">Shipping Details</label>
-            <input type="text" id="name" placeholder="Full Name" required>
-            <input type="tel" id="phone" placeholder="Mobile Number" required>
-            <textarea id="address" rows="2" placeholder="Complete Address (House No, Street, City)" required></textarea>
+            <h3 style="color: var(--dark); font-size: 1.1rem; margin-bottom: 10px;">Customer Details</h3>
+            
+            <!-- Name -->
+            <div class="form-group">
+                <label for="name">Full Name<span class="required">*</span></label>
+                <input type="text" id="name" placeholder="Enter your full name" required>
+                <div class="error-message" id="name-error"></div>
+            </div>
+            
+            <!-- Mobile Number -->
+            <div class="form-group">
+                <label for="phone">Mobile Number<span class="required">*</span></label>
+                <input type="tel" id="phone" placeholder="10-digit mobile number" required maxlength="10">
+                <div class="error-message" id="phone-error"></div>
+            </div>
+            
+            <!-- Email (Optional) -->
+            <div class="form-group">
+                <label for="email">Email (Optional)</label>
+                <input type="email" id="email" placeholder="your.email@example.com">
+                <div class="error-message" id="email-error"></div>
+            </div>
+            
+            <h3 style="color: var(--dark); font-size: 1.1rem; margin-top: 20px; margin-bottom: 10px;">Delivery Address</h3>
+            
+            <!-- Near Landmark -->
+            <div class="form-group">
+                <label for="landmark">Near Landmark<span class="required">*</span></label>
+                <input type="text" id="landmark" placeholder="e.g., Near ABC Mall, Opp. XYZ Temple" required>
+                <div class="error-message" id="landmark-error"></div>
+            </div>
+            
+            <!-- Area / Street -->
+            <div class="form-group">
+                <label for="area">Area / Street<span class="required">*</span></label>
+                <input type="text" id="area" placeholder="e.g., MG Road, Sector 5" required>
+                <div class="error-message" id="area-error"></div>
+            </div>
+            
+            <!-- City -->
+            <div class="form-group">
+                <label for="city">City<span class="required">*</span></label>
+                <input type="text" id="city" placeholder="e.g., Mumbai, Delhi" required>
+                <div class="error-message" id="city-error"></div>
+            </div>
+            
+            <!-- Pincode -->
+            <div class="form-group">
+                <label for="pincode">Pincode<span class="required">*</span></label>
+                <input type="text" id="pincode" placeholder="6-digit pincode" required maxlength="6">
+                <div class="error-message" id="pincode-error"></div>
+            </div>
+            
+            <!-- Notes (Optional) -->
+            <div class="form-group">
+                <label for="notes">Delivery Notes (Optional)</label>
+                <textarea id="notes" rows="2" placeholder="Any special instructions for delivery"></textarea>
+            </div>
         </div>
 
         <label class="payment-label">Select Payment Method</label>
@@ -300,6 +401,41 @@
         <a href="index.html" class="back-link">Cancel & Go Back</a>
     </div>
 
+    <!-- Professional Order Confirmation Modal -->
+    <div id="order-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <div class="success-icon">✓</div>
+                <h3 id="modal-title">Order Placed Successfully!</h3>
+            </div>
+            <div class="modal-body">
+                <div class="order-detail">
+                    <span class="label">Customer Name:</span>
+                    <span class="value" id="modal-customer-name">-</span>
+                </div>
+                <div class="order-detail">
+                    <span class="label">Order ID:</span>
+                    <span class="value" id="modal-order-id">-</span>
+                </div>
+                <div class="order-detail total">
+                    <span class="label">Amount to Pay:</span>
+                    <span class="value" id="modal-amount">₹0</span>
+                </div>
+                <div class="order-detail">
+                    <span class="label">Payment Mode:</span>
+                    <span class="value" id="modal-payment-mode">COD</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" onclick="closeModal()">Close</button>
+                <button type="button" class="btn-primary" id="modal-primary-btn" onclick="goToThankYou()">
+                    Go to Thank You Page
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/cod-order.js"></script>
     <script>
         // Preloader
         window.addEventListener('load', function() {
@@ -371,35 +507,124 @@
         // Page load hote hi ek baar calculation chalao
         calculateTotal('upi');
 
-        // --- 3. ORDER BUTTON WITH ANIMATION (Testing ke liye) ---
-        function placeOrder() {
-            const name = document.getElementById('name').value;
-            const phone = document.getElementById('phone').value;
-            const address = document.getElementById('address').value;
-            const btn = document.querySelector('.confirm-btn');
-
-            if(name === "" || phone === "" || address === "") {
-                alert("Please fill all details first! (Naam aur Pata likho)");
-                return;
+        // --- 3. ORDER BUTTON WITH VALIDATION AND MODAL ---
+        async function placeOrder() {
+            // Validate all fields first
+            if (!validateAllFields()) {
+                return; // Stop if validation fails
             }
+            
+            const btn = document.querySelector('.confirm-btn');
+            
+            // Get form values
+            const name = document.getElementById('name').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const landmark = document.getElementById('landmark').value.trim();
+            const area = document.getElementById('area').value.trim();
+            const city = document.getElementById('city').value.trim();
+            const pincode = document.getElementById('pincode').value.trim();
+            const notes = document.getElementById('notes').value.trim();
+            
+            // Build cart items (placeholder for now, can be enhanced later)
+            const cartItems = [
+                { 
+                    product_id: 'cow-ghee-1l', 
+                    name: productName, 
+                    price: basePrice, 
+                    qty: 1 
+                }
+            ];
+            
+            // Build address object
+            const address = {
+                name: name,
+                line1: area,
+                landmark: landmark,
+                city: city,
+                state: 'Maharashtra', // Default state, can be enhanced later
+                pincode: pincode
+            };
 
-            // Add loading state with CSS class would be better, but using inline for simplicity
+            // Show loading state
             const originalText = btn.innerHTML;
-            btn.innerHTML = 'Processing...';
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
             btn.disabled = true;
-            btn.style.opacity = '0.7';
 
-            // Simulate processing
-            setTimeout(() => {
-                btn.innerHTML = '✓ ORDER PLACED!';
-                btn.style.background = '#27ae60';
-                btn.style.borderColor = '#27ae60';
+            try {
+                // Call the Netlify function
+                const result = await placeCodOrder(cartItems, address, phone, email, notes);
                 
-                setTimeout(() => {
-                    alert(`✅ ORDER PLACED!\n\nName: ${name}\nAmount to Pay: ₹${finalAmount}\nMode: ${currentMethod.toUpperCase()}\n\n(Yeh testing order hai)`);
-                    window.location.href = 'index.html';
-                }, 1000);
-            }, 2000);
+                if (!result) {
+                    // Error already shown in placeCodOrder function
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                }
+                // Success - modal is shown by placeCodOrder function
+            } catch (error) {
+                console.error('Order placement error:', error);
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                alert('An error occurred. Please try again.');
+            }
+        }
+        
+        // Add real-time validation on blur
+        document.addEventListener('DOMContentLoaded', function() {
+            const fields = ['name', 'phone', 'email', 'landmark', 'area', 'city', 'pincode'];
+            
+            fields.forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                if (field) {
+                    field.addEventListener('blur', function() {
+                        validateField(fieldId);
+                    });
+                    
+                    // Also validate on input for immediate feedback
+                    field.addEventListener('input', function() {
+                        if (field.classList.contains('invalid')) {
+                            validateField(fieldId);
+                        }
+                    });
+                }
+            });
+        });
+        
+        function validateField(fieldId) {
+            let result;
+            const value = document.getElementById(fieldId)?.value;
+            
+            switch(fieldId) {
+                case 'name':
+                    result = validateName(value);
+                    break;
+                case 'phone':
+                    result = validateMobile(value);
+                    break;
+                case 'email':
+                    result = validateEmail(value);
+                    break;
+                case 'landmark':
+                    result = validateLandmark(value);
+                    break;
+                case 'area':
+                    result = validateArea(value);
+                    break;
+                case 'city':
+                    result = validateCity(value);
+                    break;
+                case 'pincode':
+                    result = validatePincode(value);
+                    break;
+            }
+            
+            if (result) {
+                if (!result.valid) {
+                    showError(fieldId, result.message);
+                } else {
+                    clearError(fieldId);
+                }
+            }
         }
     </script>
 

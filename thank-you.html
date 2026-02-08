@@ -4,18 +4,113 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Thank You | Vedic Origins</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      background: var(--cream, #f9f7f2);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    
+    .thank-you-container {
+      background: white;
+      max-width: 500px;
+      width: 100%;
+      padding: 40px 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+      text-align: center;
+      border: 2px solid var(--gold, #d4af37);
+      animation: slideUp 0.6s ease;
+    }
+    
+    .success-icon {
+      font-size: 4rem;
+      color: var(--gold, #d4af37);
+      margin-bottom: 20px;
+      animation: bounce 1s ease;
+    }
+    
+    .thank-you-container h1 {
+      font-family: 'Playfair Display', serif;
+      color: var(--dark, #1a1a1a);
+      font-size: 2rem;
+      margin-bottom: 15px;
+    }
+    
+    .thank-you-container p {
+      color: #666;
+      font-size: 1.1rem;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+    
+    #order-id {
+      background: #fff8e1;
+      border: 1px dashed var(--gold, #d4af37);
+      padding: 15px;
+      border-radius: 10px;
+      font-weight: bold;
+      color: var(--dark, #1a1a1a);
+      margin: 20px 0;
+      font-size: 0.95rem;
+    }
+    
+    .cta-btn {
+      display: inline-block;
+      background: linear-gradient(135deg, #1a1a1a 0%, #2c2c2c 100%);
+      color: var(--gold, #d4af37);
+      padding: 15px 40px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: bold;
+      border: 1px solid var(--gold, #d4af37);
+      margin-top: 20px;
+      transition: all 0.3s ease;
+    }
+    
+    .cta-btn:hover {
+      background: var(--gold, #d4af37);
+      color: white;
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(212, 175, 55, 0.5);
+    }
+    
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-15px); }
+      60% { transform: translateY(-8px); }
+    }
+  </style>
 </head>
 <body>
-  <section class="section">
-    <h1>Thank you for your order!</h1>
-    <p>Your COD order has been received. We'll contact you shortly.</p>
+  <div class="thank-you-container">
+    <div class="success-icon">✓</div>
+    <h1>Thank You for Your Order!</h1>
+    <p>Your COD order has been received successfully. We'll contact you shortly to confirm delivery details.</p>
     <p id="order-id"></p>
+    <p style="font-size: 0.95rem; color: #888;">
+      Our team will reach out to you within 24 hours. Keep your phone handy!
+    </p>
     <a href="index.html" class="cta-btn" role="button">Back to Home</a>
-  </section>
+  </div>
   <script>
     const id = new URLSearchParams(window.location.search).get('order');
-    if (id) document.getElementById('order-id').textContent = 'Order ID: ' + id;
+    const orderIdElement = document.getElementById('order-id');
+    if (id && orderIdElement) {
+      orderIdElement.textContent = 'Order ID: ' + id;
+    } else if (orderIdElement) {
+      orderIdElement.textContent = 'Your order has been placed successfully!';
+    }
   </script>
 </body>
 </html>
