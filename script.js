@@ -48,9 +48,7 @@ if ('IntersectionObserver' in window) {
     document.addEventListener('DOMContentLoaded', function() {
         const animatedElements = document.querySelectorAll('.p-step, .review-card, .section-box');
         animatedElements.forEach(el => {
-            if (!el.style.opacity) {
-                observer.observe(el);
-            }
+            observer.observe(el);
         });
     });
 }
@@ -113,6 +111,8 @@ if (document.getElementById('ghee-img')) {
         if(currentType === type) return;
 
         const img = document.getElementById('ghee-img');
+        if (!img) return;
+        
         const switchBox = document.querySelector('.switch-box');
         
         img.classList.add('spin');
@@ -271,7 +271,8 @@ if (document.getElementById('mobile')) {
     // 3. SEND OTP WITH LOADING ANIMATION
     window.sendOTP = function() {
         const mobile = document.getElementById('mobile').value;
-        const name = document.getElementById('fullname') ? document.getElementById('fullname').value : '';
+        const fullnameEl = document.getElementById('fullname');
+        const name = fullnameEl ? fullnameEl.value : '';
         const btn = document.getElementById('get-otp-btn');
 
         if(currentMode === 'signup' && name === "") {

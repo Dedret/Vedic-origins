@@ -986,16 +986,16 @@ select:focus {
 }
 
 .review-section::before {
-    content: '"';
+    content: '';
     position: absolute;
     top: 20px;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 15rem;
-    color: rgba(212, 175, 55, 0.05);
-    font-family: 'Playfair Display', serif;
-    line-height: 1;
+    width: 200px;
+    height: 200px;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text x="50" y="80" font-size="150" fill="rgba(212,175,55,0.05)" text-anchor="middle" font-family="Playfair Display,serif">&quot;</text></svg>') no-repeat center;
     pointer-events: none;
+    opacity: 0.5;
 }
 
 .review-grid { 
@@ -1037,19 +1037,6 @@ select:focus {
     color: var(--gold); 
     margin-bottom: 10px;
     font-size: 1.1rem;
-    position: relative;
-    display: inline-block;
-}
-
-.stars::after {
-    content: attr(data-stars);
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 0;
-    overflow: hidden;
-    color: #ffd700;
-    animation: fillStars 1s ease forwards;
 }
 
 .review-card:hover .stars {

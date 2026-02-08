@@ -383,9 +383,11 @@
                 return;
             }
 
-            // Add loading state
-            btn.innerHTML = 'Processing... <div class="spinner" style="display:inline-block; width:16px; height:16px; border:2px solid rgba(212,175,55,0.3); border-top-color:#d4af37; border-radius:50%; animation:spin 0.6s linear infinite; margin-left:10px;"></div>';
+            // Add loading state with CSS class would be better, but using inline for simplicity
+            const originalText = btn.innerHTML;
+            btn.innerHTML = 'Processing...';
             btn.disabled = true;
+            btn.style.opacity = '0.7';
 
             // Simulate processing
             setTimeout(() => {
@@ -399,11 +401,6 @@
                 }, 1000);
             }, 2000);
         }
-        
-        // Add keyframes for spinner
-        const style = document.createElement('style');
-        style.textContent = '@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }';
-        document.head.appendChild(style);
     </script>
 
 </body>
