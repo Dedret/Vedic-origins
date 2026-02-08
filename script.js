@@ -214,6 +214,5 @@ if (document.querySelector('.profile-container')) {
             alert("👋 Logged out successfully!");
             window.location.href = "index.html";
         }
-        return false; // Prevent default link behavior
     }
 }
