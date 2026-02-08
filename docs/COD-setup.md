@@ -28,11 +28,27 @@ Response:
 { "orderId": "uuid-here", "status": "cod_pending", "total": 4200 }
 ```
 
+## Thank You Page
+A thank-you page (`thank-you.html`) is included for displaying order confirmation. After a successful COD order, users are redirected to this page with the order ID in the URL query parameter.
+
+The client-side helper automatically redirects to `thank-you.html?order=<orderId>` after a successful order placement.
+
+## Client-side helper
+A ready-to-use client-side helper is available at `assets/js/cod-order.js`. This file contains the `placeCodOrder()` function that handles calling the Netlify function and redirecting to the thank-you page.
+
+To use it, include the script in your checkout page:
+```html
+<script src="assets/js/cod-order.js"></script>
+```
+
+Then call it from your checkout button (see the example usage comments in the file).
+
 ## Integration with checkout page
 To integrate with the existing `checkout.html` page, you'll need to:
 
 1. **Add separate form fields** for city, state, and pincode in checkout.html
-2. **Modify the `placeOrder()` function** to call the Netlify function when COD payment method is selected
+2. **Include the client-side helper** `<script src="assets/js/cod-order.js"></script>` in checkout.html
+3. **Modify the `placeOrder()` function** to call the helper when COD payment method is selected
 
 Example integration code:
 
