@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ | Vedic Origins</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Frequently asked questions about Vedic Origins A2 Ghee - Bilona method, delivery, storage, health benefits, and more.">
+    <meta name="keywords" content="A2 ghee FAQ, bilona ghee questions, ghee storage, ghee benefits">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://vedicorigins.example/faq.html">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://vedicorigins.example/faq.html">
+    <meta property="og:title" content="FAQ | Vedic Origins">
+    <meta property="og:description" content="Find answers to common questions about our premium A2 Ghee.">
+    <meta property="og:image" content="https://vedicorigins.example/cow0.jpg">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:url" content="https://vedicorigins.example/faq.html">
+    <meta name="twitter:title" content="FAQ | Vedic Origins">
+    
+    <!-- Favicon and Icons -->
+    <link rel="icon" type="image/svg+xml" href="/assets/icon.svg">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/icon-192.png">
+    <link rel="apple-touch-icon" href="/assets/icon-192.png">
+    <link rel="manifest" href="/manifest.webmanifest">
+    <meta name="theme-color" content="#d4af37">
+    
+    <!-- Preconnect for Performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        .faq-item {
+            background: white;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.06);
+            transition: box-shadow 0.3s ease;
+        }
+        .faq-item:hover {
+            box-shadow: 0 5px 25px rgba(0,0,0,0.12);
+        }
+        .faq-question {
+            padding: 20px 25px;
+            font-weight: bold;
+            font-size: 1.05rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(135deg, #fff 0%, #f9f7f2 100%);
+            transition: background 0.3s ease;
+        }
+        .faq-question:hover {
+            background: linear-gradient(135deg, #fff8e1 0%, #f9f7f2 100%);
+        }
+        .faq-question i {
+            color: var(--gold);
+            transition: transform 0.3s ease;
+        }
+        .faq-question.active i {
+            transform: rotate(180deg);
+        }
+        .faq-answer {
+            padding: 0 25px;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            color: #555;
+            line-height: 1.8;
+        }
+        .faq-answer.active {
+            padding: 20px 25px;
+            max-height: 500px;
+        }
+        .faq-category {
+            margin-top: 40px;
+        }
+        .faq-category h3 {
+            color: var(--gold);
+            border-bottom: 2px solid var(--gold);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="preloader-logo">Vedic Origins</div>
+    </div>
+
+    <nav class="navbar">
+        <button class="hamburger" id="hamburger" onclick="toggleSidebar()" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="sidebar">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <a href="index.html" style="text-decoration:none;"><div class="logo">Vedic Origins</div></a>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="index.html#shop">Shop</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+        </div>
+    </nav>
+
+    <!-- Sidebar Navigation -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+    <div class="sidebar" id="sidebar">
+        <ul class="sidebar-menu">
+            <li><a href="index.html"><i class="fas fa-home" aria-hidden="true"></i> Home</a></li>
+            <li><a href="index.html#shop"><i class="fas fa-shopping-bag" aria-hidden="true"></i> Shop</a></li>
+            <li><a href="about.html"><i class="fas fa-info-circle" aria-hidden="true"></i> About Us</a></li>
+            <li><a href="contact.html"><i class="fas fa-phone" aria-hidden="true"></i> Contact Us</a></li>
+            <li><a href="faq.html"><i class="fas fa-question-circle" aria-hidden="true"></i> FAQ</a></li>
+            <li><a href="login.html"><i class="fas fa-sign-in-alt" aria-hidden="true"></i> Login</a></li>
+        </ul>
+    </div>
+
+    <div class="profile-container" style="padding-top: 100px;">
+        <div class="profile-header">
+            <h1 style="color: #d4af37;">Frequently Asked Questions</h1>
+            <p>Everything you need to know about our A2 Ghee</p>
+        </div>
+
+        <div class="section-box">
+            <div class="faq-category">
+                <h3><i class="fas fa-leaf" aria-hidden="true"></i> About Our Product</h3>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        What is A2 Ghee?
+                        <i class="fas fa-chevron-down" aria-hidden="true"></i>
+                    </div>
+                    <div class="faq-answer">
+                        A2 Ghee is made from milk that contains only the A2 beta-casein protein, produced by indigenous cow breeds like Gir, Sahiwal, and Red Sindhi. This is the original type of milk that humans consumed for thousands of years before modern breeding introduced the A1 protein variant.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        What is the Bilona method?
+                        <i class="fas fa-chevron-down" aria-hidden="true"></i>
+                    </div>
+                    <div class="faq-answer">
+                        The Bilona method is a traditional technique where milk is first boiled and set to curd. The curd is then hand-churned using a wooden churner (bilona) in both clockwise and anticlockwise directions to extract butter. This butter is slowly heated on a wood fire to make Ghee. The entire process preserves nutrients and creates superior quality Ghee.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        What makes your Ghee different from store-bought brands?
+                        <i class="fas fa-chevron-down" aria-hidden="true"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Our Ghee is 100% natural, made from A2 milk of free-grazing indigenous cows, hand-churned using the traditional Bilona method, and contains no preservatives or additives. Most commercial brands use machine-made processes, mixed-breed cow milk (A1+A2), and often add preservatives for shelf life.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-category">
+                <h3><i class="fas fa-heart" aria-hidden="true"></i> Health & Benefits</h3>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        What are the health benefits of A2 Ghee?
+                        <i class="fas fa-chevron-down" aria-hidden="true"></i>
+                    </div>
+                    <div class="faq-answer">
+                        A2 Ghee is rich in vitamins A, D, E, and K, supports digestion, boosts immunity, provides healthy fats for brain function, helps in nutrient absorption, and has anti-inflammatory properties. It's easier to digest than A1 dairy and is suitable for lactose-intolerant individuals when consumed in moderation.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        Is Ghee suitable for lactose-intolerant people?
+                        <i class="fas fa-chevron-down" aria-hidden="true"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Yes, pure Ghee contains very minimal lactose and casein as these proteins are removed during the clarification process. Most lactose-intolerant individuals can safely consume Ghee. However, if you have severe allergies, please consult your doctor first.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-category">
+                <h3><i class="fas fa-shipping-fast" aria-hidden="true"></i> Orders & Delivery</h3>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        How long does delivery take?
+                        <i class="fas fa-chevron-down" aria-hidden="true"></i>
+                    </div>
+                    <div class="faq-answer">
+                        We typically ship orders within 1-2 business days. Delivery takes 3-7 business days depending on your location. We ship across India.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        Do you ship internationally?
+                        <i class="fas fa-chevron-down" aria-hidden="true"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Currently, we only ship within India. We are working on expanding our delivery to international locations soon.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        What payment methods do you accept?
+                        <i class="fas fa-chevron-down" aria-hidden="true"></i>
+                    </div>
+                    <div class="faq-answer">
+                        We accept UPI, Credit/Debit Cards, Net Banking, and Cash on Delivery (COD). Note that prepaid orders get a special discount!
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-category">
+                <h3><i class="fas fa-box" aria-hidden="true"></i> Storage & Usage</h3>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        How should I store Ghee?
+                        <i class="fas fa-chevron-down" aria-hidden="true"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Store Ghee in an airtight container in a cool, dry place away from direct sunlight. You don't need to refrigerate it. Always use a clean, dry spoon to scoop out Ghee to prevent contamination. Properly stored Ghee can last for several months.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        What is the shelf life of your Ghee?
+                        <i class="fas fa-chevron-down" aria-hidden="true"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Our Ghee has a shelf life of 12 months from the date of manufacture when stored properly. We recommend consuming it fresh for the best flavor and nutritional benefits.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        How much Ghee should I consume daily?
+                        <i class="fas fa-chevron-down" aria-hidden="true"></i>
+                    </div>
+                    <div class="faq-answer">
+                        For most adults, 1-2 teaspoons (5-10ml) per day is recommended. You can use it for cooking, add it to dal/rice, or spread it on rotis. Consult with a nutritionist or Ayurvedic practitioner for personalized recommendations.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-box" style="text-align: center; background: #fff8e1;">
+            <h3 style="color: #d4af37;">Still Have Questions?</h3>
+            <p style="margin-bottom: 20px;">We're here to help! Reach out to us anytime.</p>
+            <button class="buy-btn ripple-container" onclick="window.location.href='contact.html'" style="margin-top: 10px;">
+                Contact Us <i class="fas fa-envelope" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <h3>Vedic Origins</h3>
+            <p>Bringing purity back to your kitchen.</p>
+            <div class="socials">
+                <a href="#" aria-label="Visit our Instagram"><i class="fab fa-instagram" aria-hidden="true"></i></a>
+                <a href="#" aria-label="Visit our Facebook"><i class="fab fa-facebook" aria-hidden="true"></i></a>
+                <a href="#" aria-label="Contact us on WhatsApp"><i class="fab fa-whatsapp" aria-hidden="true"></i></a>
+            </div>
+            <nav class="footer-links">
+                <a href="about.html">About</a> | 
+                <a href="contact.html">Contact</a> | 
+                <a href="faq.html">FAQ</a> | 
+                <a href="privacy.html">Privacy</a> | 
+                <a href="terms.html">Terms</a> | 
+                <a href="shipping.html">Shipping</a> | 
+                <a href="returns.html">Returns</a>
+            </nav>
+            <p class="copyright">&copy; 2026 Vedic Origins. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        function toggleFAQ(element) {
+            const answer = element.nextElementSibling;
+            const allQuestions = document.querySelectorAll('.faq-question');
+            const allAnswers = document.querySelectorAll('.faq-answer');
+            
+            // Close all other FAQs
+            allQuestions.forEach(q => {
+                if (q !== element) {
+                    q.classList.remove('active');
+                }
+            });
+            allAnswers.forEach(a => {
+                if (a !== answer) {
+                    a.classList.remove('active');
+                }
+            });
+            
+            // Toggle current FAQ
+            element.classList.toggle('active');
+            answer.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>

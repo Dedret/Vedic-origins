@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | Vedic Origins</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Learn about Vedic Origins - our mission to bring authentic A2 Ghee made using traditional Bilona method from free-grazing cows directly to your kitchen.">
+    <meta name="keywords" content="about vedic origins, traditional ghee, bilona method, A2 ghee, organic farming">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://vedicorigins.example/about.html">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://vedicorigins.example/about.html">
+    <meta property="og:title" content="About Us | Vedic Origins">
+    <meta property="og:description" content="Learn about Vedic Origins and our commitment to bringing pure, traditional A2 Ghee to your kitchen.">
+    <meta property="og:image" content="https://vedicorigins.example/cow0.jpg">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:url" content="https://vedicorigins.example/about.html">
+    <meta name="twitter:title" content="About Us | Vedic Origins">
+    <meta name="twitter:description" content="Learn about Vedic Origins and our commitment to bringing pure, traditional A2 Ghee to your kitchen.">
+    
+    <!-- Favicon and Icons -->
+    <link rel="icon" type="image/svg+xml" href="/assets/icon.svg">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/icon-192.png">
+    <link rel="apple-touch-icon" href="/assets/icon-192.png">
+    <link rel="manifest" href="/manifest.webmanifest">
+    <meta name="theme-color" content="#d4af37">
+    
+    <!-- Preconnect for Performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [{
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://vedicorigins.example/"
+      },{
+        "@type": "ListItem",
+        "position": 2,
+        "name": "About Us",
+        "item": "https://vedicorigins.example/about.html"
+      }]
+    }
+    </script>
+</head>
+<body>
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="preloader-logo">Vedic Origins</div>
+    </div>
+
+    <nav class="navbar">
+        <button class="hamburger" id="hamburger" onclick="toggleSidebar()" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="sidebar">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <a href="index.html" style="text-decoration:none;"><div class="logo">Vedic Origins</div></a>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="index.html#shop">Shop</a>
+            <a href="contact.html">Contact</a>
+        </div>
+    </nav>
+
+    <!-- Sidebar Navigation -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+    <div class="sidebar" id="sidebar">
+        <ul class="sidebar-menu">
+            <li><a href="index.html"><i class="fas fa-home" aria-hidden="true"></i> Home</a></li>
+            <li><a href="index.html#shop"><i class="fas fa-shopping-bag" aria-hidden="true"></i> Shop</a></li>
+            <li><a href="about.html"><i class="fas fa-info-circle" aria-hidden="true"></i> About Us</a></li>
+            <li><a href="contact.html"><i class="fas fa-phone" aria-hidden="true"></i> Contact Us</a></li>
+            <li><a href="faq.html"><i class="fas fa-question-circle" aria-hidden="true"></i> FAQ</a></li>
+            <li><a href="login.html"><i class="fas fa-sign-in-alt" aria-hidden="true"></i> Login</a></li>
+        </ul>
+    </div>
+
+    <div class="profile-container" style="padding-top: 100px;">
+        <div class="profile-header">
+            <h1 style="color: #d4af37;">About Vedic Origins</h1>
+            <p>Bringing Purity Back to Your Kitchen</p>
+        </div>
+
+        <div class="section-box">
+            <h3><i class="fas fa-leaf" aria-hidden="true"></i> Our Story</h3>
+            <p>
+                At Vedic Origins, we believe that food should nourish not just the body, but also the soul. 
+                Our journey began with a simple mission: to revive the ancient tradition of making pure, 
+                hand-churned A2 Ghee using the traditional Bilona method.
+            </p>
+            <p>
+                In a world dominated by mass production and chemical processing, we chose to go back to our roots. 
+                Every jar of Vedic Origins Ghee is made from the milk of free-grazing, indigenous Gir cows that 
+                roam freely in natural pastures, eating fresh grass and herbs - not factory feed.
+            </p>
+        </div>
+
+        <div class="section-box">
+            <h3><i class="fas fa-hands" aria-hidden="true"></i> The Bilona Method</h3>
+            <p>
+                The Bilona method is a centuries-old technique mentioned in ancient Ayurvedic texts. Unlike modern 
+                centrifuge-based methods, the Bilona process involves hand-churning curd in a wooden vessel using 
+                a wooden churner, rotating it both clockwise and anticlockwise to separate butter.
+            </p>
+            <p>
+                This butter is then slowly heated on a wood fire to create golden, aromatic Ghee. The entire process 
+                is labor-intensive and time-consuming, but the result is pure, nutrient-rich Ghee with all its 
+                natural goodness intact.
+            </p>
+        </div>
+
+        <div class="section-box">
+            <h3><i class="fas fa-certificate" aria-hidden="true"></i> Our Commitment</h3>
+            <ul style="text-align: left; line-height: 2;">
+                <li><strong>100% Natural:</strong> No additives, preservatives, or chemicals</li>
+                <li><strong>Lab Tested:</strong> Every batch is tested for purity and quality</li>
+                <li><strong>Traditional Process:</strong> Hand-churned using the authentic Bilona method</li>
+                <li><strong>Happy Cows:</strong> From free-grazing, well-cared-for indigenous Gir cows</li>
+                <li><strong>Sustainable:</strong> Supporting local farmers and traditional practices</li>
+                <li><strong>Transparent:</strong> We share our process openly with our customers</li>
+            </ul>
+        </div>
+
+        <div class="section-box">
+            <h3><i class="fas fa-heart" aria-hidden="true"></i> Our Values</h3>
+            <p>
+                We are more than just a Ghee brand. We are custodians of an ancient tradition, advocates for 
+                animal welfare, supporters of sustainable agriculture, and believers in the power of pure, 
+                natural food to heal and nourish.
+            </p>
+            <p>
+                When you choose Vedic Origins, you're not just buying Ghee - you're supporting a movement to 
+                preserve traditional knowledge, protect indigenous cow breeds, and promote chemical-free, 
+                sustainable farming practices.
+            </p>
+        </div>
+
+        <div class="section-box" style="text-align: center; background: linear-gradient(135deg, #f9f7f2 0%, #fff8e1 100%);">
+            <h3 style="color: #d4af37;">Join the Vedic Origins Family</h3>
+            <p style="font-size: 1.1rem; margin-bottom: 20px;">
+                Experience the difference that purity, tradition, and care can make.
+            </p>
+            <button class="buy-btn ripple-container" onclick="window.location.href='index.html#shop'" style="margin-top: 10px;">
+                Shop Now <i class="fas fa-arrow-right" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <h3>Vedic Origins</h3>
+            <p>Bringing purity back to your kitchen.</p>
+            <div class="socials">
+                <a href="#" aria-label="Visit our Instagram"><i class="fab fa-instagram" aria-hidden="true"></i></a>
+                <a href="#" aria-label="Visit our Facebook"><i class="fab fa-facebook" aria-hidden="true"></i></a>
+                <a href="#" aria-label="Contact us on WhatsApp"><i class="fab fa-whatsapp" aria-hidden="true"></i></a>
+            </div>
+            <nav class="footer-links">
+                <a href="about.html">About</a> | 
+                <a href="contact.html">Contact</a> | 
+                <a href="faq.html">FAQ</a> | 
+                <a href="privacy.html">Privacy</a> | 
+                <a href="terms.html">Terms</a> | 
+                <a href="shipping.html">Shipping</a> | 
+                <a href="returns.html">Returns</a>
+            </nav>
+            <p class="copyright">&copy; 2026 Vedic Origins. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
