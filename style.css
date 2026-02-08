@@ -1,9 +1,15 @@
-/* --- COLORS & FONTS --- */
+/* --- 1. GLOBAL SETTINGS & VARIABLES --- */
 :root {
     --gold: #d4af37;
     --dark: #1a1a1a;
     --cream: #f9f7f2;
     --red: #e74c3c;
+    --white: #ffffff;
+    --text-grey: #555;
+}
+
+html {
+    scroll-behavior: smooth; /* Smooth scrolling for links */
 }
 
 body {
@@ -11,52 +17,167 @@ body {
     font-family: 'Lato', sans-serif;
     color: var(--dark);
     margin: 0;
-    text-align: center;
+    padding: 0;
+    overflow-x: hidden; /* Prevent horizontal scroll */
 }
 
-/* --- HEADER --- */
-.brand-header { padding: 30px 0; animation: fadeIn 1s ease; }
-.brand-name { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 2.2rem; margin: 0; letter-spacing: 2px; }
-.tagline { font-size: 0.75rem; color: #777; letter-spacing: 4px; margin-top: 5px; }
+h1, h2, h3 { font-family: 'Playfair Display', serif; }
 
-/* --- PRODUCT CARD --- */
+/* --- 2. ANIMATIONS (Rakhi gayi hain) --- */
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+/* --- 3. NAVBAR (New Addition) --- */
+.navbar {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 15px 5%; background: var(--white);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    position: sticky; top: 0; z-index: 1000;
+    animation: fadeIn 0.8s ease;
+}
+
+.logo { 
+    font-family: 'Playfair Display', serif; 
+    font-size: 1.5rem; 
+    font-weight: bold; 
+    color: var(--gold); 
+    text-transform: uppercase; 
+    letter-spacing: 1px;
+}
+
+.nav-links a { 
+    text-decoration: none; 
+    color: var(--dark); 
+    margin-left: 25px; 
+    font-weight: bold; 
+    font-size: 0.9rem; 
+    transition: 0.3s;
+}
+.nav-links a:hover { color: var(--gold); }
+
+/* --- 4. HERO SECTION (New Addition) --- */
+.hero {
+    /* Background Image - Desi Cow/Farm Feel */
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1500595046743-cd271d694d30?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
+    background-size: cover; background-position: center;
+    height: 60vh; /* Screen ka 60% height */
+    display: flex; align-items: center; justify-content: center;
+    text-align: center; color: var(--white);
+    animation: fadeIn 1.2s ease;
+}
+
+.hero-content { max-width: 800px; padding: 20px; }
+.hero h1 { font-size: 3rem; margin-bottom: 10px; color: var(--gold); text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+.hero p { font-size: 1.2rem; margin-bottom: 25px; color: #eee; letter-spacing: 1px; }
+
+.cta-btn {
+    padding: 14px 35px; background: var(--gold); border: none;
+    font-weight: bold; font-size: 1rem; cursor: pointer; border-radius: 30px;
+    color: var(--dark); transition: 0.3s;
+    box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+}
+.cta-btn:hover { transform: translateY(-3px); background: var(--white); color: var(--gold); }
+
+.trust-strip { margin-top: 35px; display: flex; gap: 20px; justify-content: center; font-size: 0.9rem; color: #ddd; }
+.trust-strip i { color: var(--gold); margin-right: 5px; }
+
+/* --- 5. SECTIONS COMMON STYLE --- */
+.section { padding: 60px 20px; }
+.section-title { text-align: center; font-size: 2.2rem; color: var(--dark); margin-bottom: 10px; }
+.section-sub { text-align: center; color: var(--text-grey); margin-bottom: 50px; font-style: italic; }
+
+/* --- 6. SHOP SECTION & PRODUCT CARD (Updated Old Style) --- */
+.shop-section { background: var(--cream); }
+
 .product-card {
-    background: white;
-    max-width: 420px;
-    margin: 10px auto 40px;
-    padding: 25px;
+    background: var(--white);
+    max-width: 450px;
+    margin: 0 auto;
+    padding: 30px;
     border-radius: 25px;
     box-shadow: 0 15px 40px rgba(0,0,0,0.08);
     border: 1px solid rgba(212, 175, 55, 0.2);
     position: relative;
-    animation: slideUp 1s ease-out;
+    /* Animation from old code */
+    animation: slideUp 1s ease-out; 
 }
 
-/* --- SWITCHER --- */
+/* Switcher Buttons */
 .switch-box { display: flex; background: #f0f0f0; border-radius: 50px; padding: 5px; margin-bottom: 25px; }
 .sw-btn { flex: 1; border: none; padding: 12px; border-radius: 40px; font-weight: bold; background: transparent; transition: 0.3s; cursor: pointer; }
 .active { background: var(--gold); color: white; box-shadow: 0 4px 10px rgba(212, 175, 55, 0.3); }
 
-/* --- IMAGE --- */
-.img-container { perspective: 1000px; margin-bottom: 20px; }
-.product-img { width: 220px; height: 220px; border-radius: 50%; object-fit: cover; border: 5px solid white; box-shadow: 0 8px 20px rgba(0,0,0,0.1); transition: transform 0.6s; }
+/* Image Area */
+.img-container { 
+    height: 280px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    perspective: 1000px; 
+    margin-bottom: 20px;
+}
+.product-img { 
+    max-height: 100%; 
+    width: auto; 
+    transition: transform 0.6s; 
+    filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2)); 
+}
 .spin { transform: rotateY(360deg); }
 
-/* --- PRICES (The Magic Logic) --- */
-.desc-text { color: #666; font-size: 0.9rem; margin-bottom: 15px; }
+/* Prices & Details */
+.desc-text { color: #666; font-size: 0.95rem; margin-bottom: 15px; text-align: center; }
 .price-box { display: flex; justify-content: center; align-items: baseline; gap: 10px; margin-bottom: 20px; }
-.mrp { text-decoration: line-through; color: #999; font-size: 1.2rem; } /* Kata hua price */
+.mrp { text-decoration: line-through; color: #999; font-size: 1.2rem; }
 .sale { font-family: 'Playfair Display', serif; font-size: 2.8rem; color: var(--dark); font-weight: bold; }
-.badge { background: var(--red); color: white; padding: 4px 8px; border-radius: 6px; font-size: 0.8rem; font-weight: bold; position: relative; top: -5px; }
+.badge { background: var(--red); color: white; padding: 4px 8px; border-radius: 6px; font-size: 0.8rem; font-weight: bold; position: relative; top: -8px; }
 
-/* --- BUTTONS --- */
-.qty-label { font-size: 0.7rem; font-weight: bold; color: #888; display: block; margin-bottom: 5px; }
-select { width: 100%; padding: 12px; margin-bottom: 20px; border-radius: 12px; border: 1px solid #ddd; font-weight: bold; text-align: center; font-size: 1rem; background: #fff; }
-.buy-btn { background: var(--dark); color: var(--gold); width: 100%; padding: 18px; border: 1px solid var(--gold); border-radius: 12px; font-weight: bold; font-size: 1.1rem; letter-spacing: 1px; cursor: pointer; transition: 0.2s; }
-.buy-btn:active { transform: scale(0.96); }
-.secure-text { font-size: 0.8rem; color: #999; margin-top: 15px; }
+/* Buy Button Area */
+.qty-label { font-size: 0.75rem; font-weight: bold; color: #888; display: block; margin-bottom: 8px; text-align: center; }
+select { width: 100%; padding: 12px; margin-bottom: 20px; border-radius: 12px; border: 1px solid #ddd; font-weight: bold; text-align: center; font-size: 1rem; background: #fff; cursor: pointer; }
 
-/* --- ANIMATIONS --- */
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-@keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+.buy-btn { 
+    background: var(--dark); color: var(--gold); width: 100%; padding: 18px; 
+    border: 1px solid var(--gold); border-radius: 12px; font-weight: bold; 
+    font-size: 1.1rem; letter-spacing: 1px; cursor: pointer; transition: 0.2s; 
+}
+.buy-btn:hover { background: var(--gold); color: var(--white); }
+.buy-btn:active { transform: scale(0.98); }
+.secure-text { font-size: 0.8rem; color: #999; margin-top: 15px; text-align: center; }
 
+/* --- 7. PROCESS SECTION (New Addition) --- */
+.process-section { background: var(--white); }
+.process-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; text-align: center; }
+.p-step { flex: 1; min-width: 200px; max-width: 250px; padding: 20px; transition: 0.3s; }
+.p-step:hover { transform: translateY(-5px); }
+.p-step i { font-size: 2.5rem; color: var(--gold); margin-bottom: 15px; }
+.p-step h3 { margin: 10px 0; color: var(--dark); }
+.p-step p { color: var(--text-grey); font-size: 0.9rem; line-height: 1.5; }
+
+/* --- 8. REVIEWS SECTION (New Addition) --- */
+.review-section { background: #fdfbf7; }
+.review-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
+.review-card { 
+    background: var(--white); padding: 25px; border-radius: 15px; 
+    max-width: 320px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); text-align: left; 
+    border-left: 4px solid var(--gold);
+}
+.stars { color: var(--gold); margin-bottom: 10px; }
+.review-card p { font-style: italic; color: #555; font-size: 0.95rem; line-height: 1.6; }
+.review-card span { display: block; margin-top: 15px; font-weight: bold; text-align: right; font-size: 0.9rem; color: var(--dark); }
+
+/* --- 9. FOOTER (New Addition) --- */
+footer { background: var(--dark); color: white; padding: 40px 20px; text-align: center; margin-top: 20px; }
+.footer-content h3 { color: var(--gold); font-size: 1.5rem; margin-bottom: 10px; }
+.socials { margin: 20px 0; }
+.socials i { font-size: 1.5rem; margin: 0 15px; color: var(--gold); cursor: pointer; transition: 0.3s; }
+.socials i:hover { color: var(--white); transform: scale(1.2); }
+.copyright { font-size: 0.8rem; color: #777; margin-top: 20px; }
+
+/* --- 10. MOBILE RESPONSIVE --- */
+@media (max-width: 768px) {
+    .navbar { flex-direction: column; gap: 10px; padding: 15px; }
+    .nav-links { display: none; } /* Mobile mein menu links hide simple rakhne ke liye */
+    .hero h1 { font-size: 2rem; }
+    .hero { height: 50vh; }
+    .product-card { width: 90%; margin: 0 auto; }
+}
