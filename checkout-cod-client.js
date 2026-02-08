@@ -52,10 +52,11 @@ async function placeOrderCOD(orderData) {
  * // passing the product ID explicitly from the product listing page
  * const productId = productName
  *   .toLowerCase()
+ *   .trim()                        // trim whitespace first
  *   .replace(/[^a-z0-9\s-]/g, '') // remove special characters
  *   .replace(/\s+/g, '-')          // replace spaces with hyphens
  *   .replace(/-+/g, '-')           // collapse multiple hyphens
- *   .trim();
+ *   .replace(/^-+|-+$/g, '');      // remove leading/trailing hyphens
  * 
  * // When user clicks confirm button
  * async function confirmOrder() {
