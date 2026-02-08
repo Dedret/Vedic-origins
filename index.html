@@ -3,57 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vedic Origins | Pure Desi Ghee</title>
-    
+    <title>Vedic Origins | Premium A2 Ghee</title>
     <link rel="stylesheet" href="style.css">
-    
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <div class="brand-header">
-        <h1 class="brand-name">Vedic Origins</h1>
-        <p class="tagline">HAND-CHURNED BILONA GHEE</p>
-    </div>
-
-    <div class="product-card">
-        <div class="switch-box">
-            <button class="sw-btn active" id="cow-btn" onclick="switchGhee('cow')">COW GHEE</button>
-            <button class="sw-btn" id="buff-btn" onclick="switchGhee('buffalo')">BUFFALO</button>
+    <nav class="navbar">
+        <div class="logo">Vedic Origins</div>
+        <div class="nav-links">
+            <a href="#shop">Shop</a>
+            <a href="#process">Process</a>
+            <a href="#reviews">Reviews</a>
         </div>
+    </nav>
 
-        <div class="img-container">
-            <img id="ghee-img" src="https://via.placeholder.com/400x400/f1c40f/fff?text=Cow+Ghee" class="product-img" alt="Ghee Jar">
-        </div>
-
-        <div class="details">
-            <h2 id="title">A2 Gir Cow Ghee</h2>
-            <p id="desc" class="desc-text">Medicinal Grade. Golden Yellow. Good for Heart.</p>
+    <header class="hero">
+        <div class="hero-content">
+            <h1>Golden Elixir of Life</h1>
+            <p>Hand-churned Bilona Ghee made from free-grazing cows.</p>
+            <a href="#shop"><button class="cta-btn">BUY NOW</button></a>
             
-            <div class="price-box">
-                <span id="mrp" class="mrp">₹4500</span>
-                <span id="price" class="sale">₹4000</span>
-                <span id="disc" class="badge">11% OFF</span>
+            <div class="trust-strip">
+                <span><i class="fas fa-flask"></i> Lab Tested</span>
+                <span><i class="fas fa-leaf"></i> 100% Natural</span>
+                <span><i class="fas fa-award"></i> No Preservatives</span>
+            </div>
+        </div>
+    </header>
+
+    <section id="shop" class="section shop-section">
+        <h2 class="section-title">Choose Your Purity</h2>
+        
+        <div class="product-card">
+            <div class="switch-box">
+                <button class="sw-btn active" id="cow-btn" onclick="switchGhee('cow')">COW GHEE</button>
+                <button class="sw-btn" id="buff-btn" onclick="switchGhee('buffalo')">BUFFALO</button>
             </div>
 
-            <label class="qty-label">SELECT QUANTITY</label>
-            <select id="qty" onchange="updatePrice()">
-                <option value="0">250 ml (Trial)</option>
-                <option value="1">500 ml (Standard)</option>
-                <option value="2">750 ml (Value Pack)</option>
-                <option value="3">1 Litre (Family Jar)</option>
-            </select>
+            <div class="img-container">
+                <img id="ghee-img" src="cow0.jpg" class="product-img" alt="Ghee Jar">
+            </div>
 
-            <a id="pay-link" href="#" target="_blank">
-                <button class="buy-btn">ORDER NOW <i class="fas fa-arrow-right"></i></button>
-            </a>
-            
-            <p class="secure-text"><i class="fas fa-lock"></i> Secure Payment via Razorpay</p>
+            <div class="details">
+                <h2 id="title">A2 Gir Cow Ghee</h2>
+                <p id="desc" class="desc-text">Medicinal Grade. Golden Yellow. Good for Heart.</p>
+                
+                <div class="price-box">
+                    <span id="mrp" class="mrp">₹4500</span>
+                    <span id="price" class="sale">₹4000</span>
+                    <span id="disc" class="badge">11% OFF</span>
+                </div>
+
+                <label class="qty-label">SELECT QUANTITY</label>
+                <select id="qty" onchange="updatePrice()">
+                    <option value="0">250 ml (Trial)</option>
+                    <option value="1">500 ml (Standard)</option>
+                    <option value="2">750 ml (Value Pack)</option>
+                    <option value="3">1 Litre (Family Jar)</option>
+                </select>
+
+                <a id="pay-link" href="#">
+                    <button class="buy-btn">ORDER NOW <i class="fas fa-arrow-right"></i></button>
+                </a>
+                
+                <p class="secure-text"><i class="fas fa-lock"></i> Secure Checkout</p>
+            </div>
         </div>
-    </div>
+    </section>
+
+    <section id="process" class="section process-section">
+        <h2 class="section-title">The Vedic Bilona Method</h2>
+        <p class="section-sub">We don't use machines. We use patience.</p>
+        
+        <div class="process-grid">
+            <div class="p-step">
+                <i class="fas fa-cow"></i>
+                <h3>Free Grazing</h3>
+                <p>Cows eat natural grass, not plastic feed.</p>
+            </div>
+            <div class="p-step">
+                <i class="fas fa-fire"></i>
+                <h3>Curd Setting</h3>
+                <p>Milk is boiled in earthen pots & set to curd.</p>
+            </div>
+            <div class="p-step">
+                <i class="fas fa-hands"></i>
+                <h3>Hand Churned</h3>
+                <p>Churned both ways (Bilona) to separate butter.</p>
+            </div>
+            <div class="p-step">
+                <i class="fas fa-jar"></i>
+                <h3>Slow Heating</h3>
+                <p>Butter is melted on low wood fire to make Ghee.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="reviews" class="section review-section">
+        <h2 class="section-title">Loved by Families</h2>
+        <div class="review-grid">
+            <div class="review-card">
+                <div class="stars">⭐⭐⭐⭐⭐</div>
+                <p>"The aroma reminds me of my village. Best A2 Ghee I've found online."</p>
+                <span>- Rajesh K.</span>
+            </div>
+            <div class="review-card">
+                <div class="stars">⭐⭐⭐⭐⭐</div>
+                <p>"Finally a genuine product. My kids love the taste on rotis."</p>
+                <span>- Sneha M.</span>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <h3>Vedic Origins</h3>
+            <p>Bringing purity back to your kitchen.</p>
+            <div class="socials">
+                <i class="fab fa-instagram"></i>
+                <i class="fab fa-facebook"></i>
+                <i class="fab fa-whatsapp"></i>
+            </div>
+            <p class="copyright">&copy; 2026 Vedic Origins. All rights reserved.</p>
+        </div>
+    </footer>
 
     <script src="script.js"></script>
-
 </body>
 </html>
