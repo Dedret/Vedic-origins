@@ -87,3 +87,103 @@ function updatePrice() {
 
 // Page load hone par ek baar chalao
 updatePrice();
+// --- LOGIN PAGE LOGIC ---
+
+// Check if we are on the login page
+if(document.getElementById('mobile')) {
+
+    let currentMode = 'login'; 
+
+    // 1. SWITCH TABS
+    window.switchTab = function(mode) {
+        currentMode = mode;
+        const btns = document.querySelectorAll('.tab-btn');
+        const nameField = document.getElementById('name-field');
+        const title = document.getElementById('form-title');
+
+        if (mode === 'signup') {
+            btns[0].classList.remove('active-tab');
+            btns[1].classList.add('active-tab');
+            nameField.style.display = 'flex';
+            title.innerText = "Join Family";
+        } else {
+            btns[1].classList.remove('active-tab');
+            btns[0].classList.add('active-tab');
+            nameField.style.display = 'none';
+            title.innerText = "Welcome Back";
+        }
+    }
+
+    // 2. VALIDATE MOBILE
+    window.validateMobile = function() {
+        const mobileInput = document.getElementById('mobile');
+        const btn = document.getElementById('get-otp-btn');
+
+        // Safe Regex
+        const regex = new RegExp("[^0-9]", "g");
+        mobileInput.value = mobileInput.value.replace(regex, "");
+        
+        if (mobileInput.value.length === 10) {
+            btn.disabled = false;
+            btn.style.opacity = "1";
+            btn.style.cursor = "pointer";
+        } else {
+            btn.disabled = true;
+            btn.style.opacity = "0.6";
+            btn.style.cursor = "not-allowed";
+        }
+    }
+
+    // 3. SEND OTP
+    window.sendOTP = function() {
+        const mobile = document.getElementById('mobile').value;
+        const name = document.getElementById('fullname').value;
+
+        if(currentMode === 'signup' && name === "") {
+            alert("Please enter your Full Name first!");
+            return;
+        }
+
+        document.getElementById('get-otp-btn').innerText = "Sending...";
+        
+        setTimeout(() => {
+            document.getElementById('step-1').style.display = 'none';
+            document.getElementById('step-2').style.display = 'block';
+            document.getElementById('user-mobile').innerText = "+91 " + mobile;
+            
+            alert("Vedic Origins OTP: 1234");
+            document.getElementById('otp1').focus();
+        }, 1000);
+    }
+
+    // 4. AUTO MOVE CURSOR
+    window.moveNext = function(current, nextID) {
+        if(current.value.length >= 1) {
+            if(nextID) {
+                document.getElementById(nextID).focus();
+            } else {
+                document.querySelector('#step-2 .auth-btn').focus();
+            }
+        }
+    }
+
+    // 5. VERIFY LOGIN
+    window.verifyLogin = function() {
+        const o1 = document.getElementById('otp1').value;
+        const o2 = document.getElementById('otp2').value;
+        const o3 = document.getElementById('otp3').value;
+        const o4 = document.getElementById('otp4').value;
+        const code = o1 + o2 + o3 + o4;
+
+        if(code === "1234") {
+            alert("✅ Success! Welcome to Vedic Origins.");
+            window.location.href = "index.html"; 
+        } else {
+            alert("❌ Wrong OTP! Try 1234");
+            document.getElementById('otp1').value = "";
+            document.getElementById('otp2').value = "";
+            document.getElementById('otp3').value = "";
+            document.getElementById('otp4').value = "";
+        }
+    }
+}
