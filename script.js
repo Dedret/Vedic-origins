@@ -199,12 +199,34 @@ if (document.querySelector('.profile-container')) {
         alert(`Tracking Order:\n\nProduct: ${product}\nOrdered: ${orderDate}\n\nStatus: Order is on the way! 🚚`);
     }
     
+    // Save Profile Details and reflect on page
+    window.saveProfile = function(event) {
+        event.preventDefault();
+        const name = document.getElementById('profile-name').value.trim();
+        const email = document.getElementById('profile-email').value.trim();
+        const mobile = document.getElementById('profile-mobile').value.trim();
+        const address = document.getElementById('profile-address').value.trim();
+
+        if(!name || !email || !mobile || !address) {
+            alert("Please fill all details before saving.");
+            return;
+        }
+
+        document.getElementById('display-name').innerText = name;
+        document.getElementById('display-email').innerText = email;
+        document.getElementById('display-mobile').innerText = "+91 " + mobile;
+        document.getElementById('display-address').innerText = address;
+
+        alert("✅ Profile updated successfully!");
+    }
+    
     // Edit Address Functionality
     window.editAddress = function() {
         const newAddress = prompt("Enter new address:", "123, Village Road, Near Old Temple, Guna, Madhya Pradesh - 473001");
         if(newAddress && newAddress.trim() !== "") {
             alert("✅ Address Updated Successfully!");
-            // In real app, this would update the database
+            document.getElementById('profile-address').value = newAddress.trim();
+            document.getElementById('display-address').innerText = newAddress.trim();
         }
     }
     
