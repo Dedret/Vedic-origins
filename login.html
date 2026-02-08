@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Vedic Origins</title>
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&amp;family=Lato:wght@300;400;700&amp;display=swap" rel="stylesheet">
+    
+    <style>
+        /* FIX 2: Colors defined at the top to prevent CSS errors */
+        :root {
+            --gold: #d4af37;
+            --dark: #1a1a1a;
+            --cream: #f9f7f2;
+            --white: #ffffff;
+        }
+
+        body { margin: 0; padding: 0; font-family: 'Lato', sans-serif; background-color: var(--cream); }
+
+        /* Navbar */
+        .navbar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 5%; background: var(--white);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            position: fixed; top: 0; width: 90%; z-index: 1000;
+        }
+        .logo { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--gold); font-weight: bold; }
+        .nav-links a { text-decoration: none; color: var(--dark); margin-left: 20px; font-weight: bold; font-size: 0.9rem; }
+
+        /* Login Container */
+        .login-container {
+            min-height: 100vh;
+            display: flex; align-items: center; justify-content: center;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1500595046743-cd271d694d30?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover; background-position: center;
+        }
+
+        .login-box {
+            background: #ffffff; padding: 40px 30px; border-radius: 20px;
+            width: 350px; text-align: center; margin-top: 60px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3); border-top: 5px solid var(--gold);
+        }
+
+        h2 { font-family: 'Playfair Display', serif; margin-bottom: 5px; color: var(--dark); }
+        .sub-text { color: #666; font-size: 0.9rem; margin-bottom: 20px; }
+
+        /* FIX 3: Added Tabs for Login/Signup */
+        .auth-tabs { display: flex; justify-content: space-around; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+        .tab-btn {
+            background: none; border: none; padding: 10px 20px;
+            font-weight: bold; color: #aaa; cursor: pointer; transition: 0.3s; font-size: 1rem;
+        }
+        .active-tab { color: var(--gold); border-bottom: 3px solid var(--gold); }
+
+        /* Input Fields */
+        .input-group {
+            display: flex; align-items: center; border: 1px solid #ccc;
+            border-radius: 8px; padding: 5px 15px; margin-bottom: 15px; background: #fdfbf7;
+        }
+        .input-group i { color: var(--gold); margin-right: 10px; }
+        .input-group input {
+            border: none; outline: none; width: 100%; font-size: 1rem;
+            background: transparent; font-weight: bold; color: var(--dark);
+        }
+
+        /* Buttons */
+        .auth-btn {
+            width: 100%; padding: 14px; background: var(--dark); color: var(--gold);
+            border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 10px;
+        }
+        .auth-btn:hover { background: var(--gold); color: white; }
+        .auth-btn:disabled { background: #ccc; cursor: not-allowed; opacity: 0.7; }
+
+        /* OTP Inputs */
+        .otp-container { display: flex; justify-content: space-between; gap: 10px; margin: 20px 0; }
+        .otp-box {
+            width: 50px; height: 50px; font-size: 1.5rem; text-align: center;
+            font-weight: bold; border: 1px solid #ddd; border-radius: 10px; background: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">Vedic Origins</div>
+        <div class="nav-links">
+            <a href="#">Home</a>
+            <a href="#">Shop</a>
+        </div>
+    </nav>
+
+    <div class="login-container">
+        <div class="login-box">
+            
+            <div class="auth-tabs">
+                <button class="tab-btn active-tab" onclick="switchTab('login')">Login</button>
+                <button class="tab-btn" onclick="switchTab('signup')">Create Account</button>
+            </div>
+
+            <h2 id="form-title">Welcome Back</h2>
+            <p class="sub-text" id="form-sub">Enter number to continue</p>
+
+            <div id="step-1">
+                <div class="input-group" id="name-field" style="display: none;">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="fullname" placeholder="Full Name">
+                </div>
+
+                <div class="input-group">
+                    <i class="fas fa-phone-alt"></i>
+                    <span style="font-weight:bold; margin-right:10px; color:#333;">+91</span>
+                    <input type="tel" id="mobile" placeholder="Mobile Number" maxlength="10" oninput="validateMobile()">
+                </div>
+
+                <button class="auth-btn" id="get-otp-btn" onclick="sendOTP()" disabled>GET OTP</button>
+            </div>
+
+            <div id="step-2" style="display: none;">
+                <p style="font-size:0.9rem; color:#666;">OTP sent to <b id="user-mobile">...</b></p>
+                <div class="otp-container">
+    <input type="tel" inputmode="numeric" pattern="[0-9]*" class="otp-box" id="otp1" maxlength="1" oninput="moveNext(this, 'otp2')">
+    <input type="tel" inputmode="numeric" pattern="[0-9]*" class="otp-box" id="otp2" maxlength="1" oninput="moveNext(this, 'otp3')">
+    <input type="tel" inputmode="numeric" pattern="[0-9]*" class="otp-box" id="otp3" maxlength="1" oninput="moveNext(this, 'otp4')">
+    <input type="tel" inputmode="numeric" pattern="[0-9]*" class="otp-box" id="otp4" maxlength="1" oninput="moveNext(this, null)">
+</div>
+
+                <button class="auth-btn" onclick="verifyLogin()">VERIFY & PROCEED</button>
+                <p style="font-size:0.8rem; margin-top:15px; cursor:pointer; text-decoration:underline;" onclick="location.reload()">Change Number?</p>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        let currentMode = 'login'; 
+
+        // 1. SWITCH TABS
+        function switchTab(mode) {
+            currentMode = mode;
+            const btns = document.querySelectorAll('.tab-btn');
+            const nameField = document.getElementById('name-field');
+            const title = document.getElementById('form-title');
+
+            if (mode === 'signup') {
+                btns[0].classList.remove('active-tab');
+                btns[1].classList.add('active-tab');
+                nameField.style.display = 'flex'; // Show Name
+                title.innerText = "Join Family";
+            } else {
+                btns[1].classList.remove('active-tab');
+                btns[0].classList.add('active-tab');
+                nameField.style.display = 'none'; // Hide Name
+                title.innerText = "Welcome Back";
+            }
+        }
+
+        // 2. VALIDATE MOBILE (FIX 4: Using new RegExp for safety)
+        function validateMobile() {
+            const mobileInput = document.getElementById('mobile');
+            const btn = document.getElementById('get-otp-btn');
+
+            // Safe Regex method that works on all compilers
+            const regex = new RegExp("[^0-9]", "g");
+            mobileInput.value = mobileInput.value.replace(regex, "");
+            
+            if (mobileInput.value.length === 10) {
+                btn.disabled = false;
+                btn.style.opacity = "1";
+                btn.style.cursor = "pointer";
+            } else {
+                btn.disabled = true;
+                btn.style.opacity = "0.6";
+                btn.style.cursor = "not-allowed";
+            }
+        }
+
+        // 3. SEND OTP
+        function sendOTP() {
+            const mobile = document.getElementById('mobile').value;
+            const name = document.getElementById('fullname').value;
+
+            // Check if name is needed
+            if(currentMode === 'signup' && name === "") {
+                alert("Please enter your Full Name first!");
+                return;
+            }
+
+            document.getElementById('get-otp-btn').innerText = "Sending...";
+            
+            setTimeout(() => {
+                document.getElementById('step-1').style.display = 'none';
+                document.getElementById('step-2').style.display = 'block';
+                document.getElementById('user-mobile').innerText = "+91 " + mobile;
+                
+                alert("Vedic Origins OTP: 1234");
+                document.getElementById('otp1').focus();
+            }, 1000);
+        }
+
+        // 4. AUTO MOVE OTP CURSOR
+        function moveNext(current, nextID) {
+            if(current.value.length >= 1) {
+                if(nextID) {
+                    document.getElementById(nextID).focus();
+                } else {
+                    document.querySelector('#step-2 .auth-btn').focus();
+                }
+            }
+        }
+
+        // 5. VERIFY LOGIN
+        function verifyLogin() {
+            const o1 = document.getElementById('otp1').value;
+            const o2 = document.getElementById('otp2').value;
+            const o3 = document.getElementById('otp3').value;
+            const o4 = document.getElementById('otp4').value;
+            const code = o1 + o2 + o3 + o4;
+
+            if(code === "1234") {
+                alert("✅ Success! Welcome to Vedic Origins.");
+                window.location.href = "index.html"; 
+            } else {
+                alert("❌ Wrong OTP! Try 1234");
+                document.getElementById('otp1').value = "";
+                document.getElementById('otp2').value = "";
+                document.getElementById('otp3').value = "";
+                document.getElementById('otp4').value = "";
+            }
+        }
+    </script>
+
+</body>
+</html>
+
