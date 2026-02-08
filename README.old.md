@@ -1,2 +1,0 @@
-# Vedic-origins
-Testing
