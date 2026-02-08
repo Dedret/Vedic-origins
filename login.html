@@ -7,6 +7,7 @@
     
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&amp;family=Lato:wght@300;400;700&amp;display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
     <style>
         /* FIX 2: Colors defined at the top to prevent CSS errors */
@@ -79,6 +80,25 @@
             width: 50px; height: 50px; font-size: 1.5rem; text-align: center;
             font-weight: bold; border: 1px solid #ddd; border-radius: 10px; background: #f9f9f9;
         }
+        
+        /* Mode Toggle */
+        .mode-toggle {
+            display: flex; gap: 10px; justify-content: center; margin-bottom: 20px;
+        }
+        .mode-btn {
+            flex: 1; padding: 10px; background: #f0f0f0; border: 1px solid #ddd;
+            border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s;
+        }
+        .mode-btn.active {
+            background: var(--gold); color: white; border-color: var(--gold);
+        }
+        
+        .error-msg {
+            color: #e74c3c; font-size: 0.9rem; margin-top: 10px; display: none;
+        }
+        .success-msg {
+            color: #27ae60; font-size: 0.9rem; margin-top: 10px; display: none;
+        }
     </style>
 </head>
 <body>
@@ -93,46 +113,274 @@
 
     <div class="login-container">
         <div class="login-box">
-            
-            <div class="auth-tabs">
-                <button class="tab-btn active-tab" onclick="switchTab('login')">Login</button>
-                <button class="tab-btn" onclick="switchTab('signup')">Create Account</button>
+            <h2 id="form-title">Welcome Back</h2>
+            <p class="sub-text" id="form-sub">Sign in to continue</p>
+
+            <!-- Mode Toggle: Email or Phone -->
+            <div class="mode-toggle">
+                <button class="mode-btn active" id="email-mode-btn" onclick="switchMode('email')">
+                    <i class="fas fa-envelope"></i> Email
+                </button>
+                <button class="mode-btn" id="phone-mode-btn" onclick="switchMode('phone')">
+                    <i class="fas fa-phone"></i> Phone
+                </button>
             </div>
 
-            <h2 id="form-title">Welcome Back</h2>
-            <p class="sub-text" id="form-sub">Enter number to continue</p>
-
             <div id="step-1">
-                <div class="input-group" id="name-field" style="display: none;">
-                    <i class="fas fa-user"></i>
-                    <input type="text" id="fullname" placeholder="Full Name">
+                <!-- Email Input -->
+                <div class="input-group" id="email-field">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="email-input" placeholder="Enter your email" oninput="validateInput()">
                 </div>
 
-                <div class="input-group">
+                <!-- Phone Input -->
+                <div class="input-group" id="phone-field" style="display: none;">
                     <i class="fas fa-phone-alt"></i>
                     <span style="font-weight:bold; margin-right:10px; color:#333;">+91</span>
-                    <input type="tel" id="mobile" placeholder="Mobile Number" maxlength="10" oninput="validateMobile()">
+                    <input type="tel" id="phone-input" placeholder="10-digit mobile" maxlength="10" oninput="validateInput()">
                 </div>
 
-                <button class="auth-btn" id="get-otp-btn" onclick="sendOTP()" disabled>GET OTP</button>
+                <div class="error-msg" id="input-error"></div>
+                <div class="success-msg" id="input-success"></div>
+
+                <button class="auth-btn" id="send-otp-btn" onclick="sendOTP()" disabled>SEND OTP</button>
             </div>
 
             <div id="step-2" style="display: none;">
-                <p style="font-size:0.9rem; color:#666;">OTP sent to <b id="user-mobile">...</b></p>
+                <p style="font-size:0.9rem; color:#666;">OTP sent to <b id="user-identifier">...</b></p>
                 <div class="otp-container">
-    <input type="tel" inputmode="numeric" pattern="[0-9]*" class="otp-box" id="otp1" maxlength="1" oninput="moveNext(this, 'otp2')">
-    <input type="tel" inputmode="numeric" pattern="[0-9]*" class="otp-box" id="otp2" maxlength="1" oninput="moveNext(this, 'otp3')">
-    <input type="tel" inputmode="numeric" pattern="[0-9]*" class="otp-box" id="otp3" maxlength="1" oninput="moveNext(this, 'otp4')">
-    <input type="tel" inputmode="numeric" pattern="[0-9]*" class="otp-box" id="otp4" maxlength="1" oninput="moveNext(this, null)">
-</div>
+                    <input type="tel" inputmode="numeric" pattern="[0-9]*" class="otp-box" id="otp1" maxlength="1" oninput="moveNext(this, 'otp2')">
+                    <input type="tel" inputmode="numeric" pattern="[0-9]*" class="otp-box" id="otp2" maxlength="1" oninput="moveNext(this, 'otp3')">
+                    <input type="tel" inputmode="numeric" pattern="[0-9]*" class="otp-box" id="otp3" maxlength="1" oninput="moveNext(this, 'otp4')">
+                    <input type="tel" inputmode="numeric" pattern="[0-9]*" class="otp-box" id="otp4" maxlength="1" oninput="moveNext(this, 'otp5')">
+                    <input type="tel" inputmode="numeric" pattern="[0-9]*" class="otp-box" id="otp5" maxlength="1" oninput="moveNext(this, 'otp6')">
+                    <input type="tel" inputmode="numeric" pattern="[0-9]*" class="otp-box" id="otp6" maxlength="1" oninput="moveNext(this, null)">
+                </div>
 
-                <button class="auth-btn" onclick="verifyLogin()">VERIFY & PROCEED</button>
-                <p style="font-size:0.8rem; margin-top:15px; cursor:pointer; text-decoration:underline;" onclick="location.reload()">Change Number?</p>
+                <div class="error-msg" id="verify-error"></div>
+                <div class="success-msg" id="verify-success"></div>
+
+                <button class="auth-btn" id="verify-btn" onclick="verifyOTPCode()">VERIFY & PROCEED</button>
+                <p style="font-size:0.8rem; margin-top:15px; cursor:pointer; text-decoration:underline;" onclick="location.reload()">Change Email/Phone?</p>
             </div>
 
         </div>
     </div>
+    
+    <script src="assets/js/config.example.js"></script>
+    <script src="assets/js/auth.js"></script>
     <script src="script.js"></script>
+    <script>
+        // Login page specific logic
+        let currentMode = 'email'; // 'email' or 'phone'
+        let currentIdentifier = ''; // Store email or phone for verification
+
+        function switchMode(mode) {
+            currentMode = mode;
+            const emailField = document.getElementById('email-field');
+            const phoneField = document.getElementById('phone-field');
+            const emailBtn = document.getElementById('email-mode-btn');
+            const phoneBtn = document.getElementById('phone-mode-btn');
+            const emailInput = document.getElementById('email-input');
+            const phoneInput = document.getElementById('phone-input');
+
+            if (mode === 'email') {
+                emailField.style.display = 'flex';
+                phoneField.style.display = 'none';
+                emailBtn.classList.add('active');
+                phoneBtn.classList.remove('active');
+                phoneInput.value = '';
+            } else {
+                emailField.style.display = 'none';
+                phoneField.style.display = 'flex';
+                emailBtn.classList.remove('active');
+                phoneBtn.classList.add('active');
+                emailInput.value = '';
+            }
+            
+            validateInput();
+        }
+
+        function validateInput() {
+            const sendBtn = document.getElementById('send-otp-btn');
+            const errorMsg = document.getElementById('input-error');
+            errorMsg.style.display = 'none';
+
+            if (currentMode === 'email') {
+                const email = document.getElementById('email-input').value.trim();
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                
+                if (email && emailRegex.test(email)) {
+                    sendBtn.disabled = false;
+                    sendBtn.style.opacity = '1';
+                    return true;
+                } else {
+                    sendBtn.disabled = true;
+                    sendBtn.style.opacity = '0.6';
+                    return false;
+                }
+            } else {
+                const phone = document.getElementById('phone-input').value.trim();
+                
+                if (phone.length === 10 && /^\d{10}$/.test(phone)) {
+                    sendBtn.disabled = false;
+                    sendBtn.style.opacity = '1';
+                    return true;
+                } else {
+                    sendBtn.disabled = true;
+                    sendBtn.style.opacity = '0.6';
+                    return false;
+                }
+            }
+        }
+
+        async function sendOTP() {
+            const btn = document.getElementById('send-otp-btn');
+            const errorMsg = document.getElementById('input-error');
+            const successMsg = document.getElementById('input-success');
+            
+            errorMsg.style.display = 'none';
+            successMsg.style.display = 'none';
+
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+            btn.disabled = true;
+
+            try {
+                let result;
+                
+                if (currentMode === 'email') {
+                    const email = document.getElementById('email-input').value.trim();
+                    currentIdentifier = email;
+                    result = await sendEmailOTP(email);
+                } else {
+                    const phone = document.getElementById('phone-input').value.trim();
+                    const phoneWithCode = '+91' + phone;
+                    currentIdentifier = phoneWithCode;
+                    result = await sendPhoneOTP(phoneWithCode);
+                }
+
+                if (result.success) {
+                    // Show success and move to OTP entry
+                    successMsg.textContent = 'OTP sent successfully!';
+                    successMsg.style.display = 'block';
+                    
+                    setTimeout(() => {
+                        document.getElementById('step-1').style.display = 'none';
+                        document.getElementById('step-2').style.display = 'block';
+                        document.getElementById('user-identifier').textContent = currentIdentifier;
+                        document.getElementById('otp1').focus();
+                    }, 1000);
+                } else {
+                    errorMsg.textContent = result.error || 'Failed to send OTP. Please try again.';
+                    errorMsg.style.display = 'block';
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                }
+            } catch (error) {
+                console.error('Send OTP error:', error);
+                errorMsg.textContent = 'An error occurred. Please try again.';
+                errorMsg.style.display = 'block';
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        }
+
+        function moveNext(current, nextID) {
+            if (current.value.length >= 1) {
+                current.classList.add('success');
+                if (nextID) {
+                    document.getElementById(nextID).focus();
+                }
+            }
+        }
+
+        async function verifyOTPCode() {
+            const btn = document.getElementById('verify-btn');
+            const errorMsg = document.getElementById('verify-error');
+            const successMsg = document.getElementById('verify-success');
+            
+            errorMsg.style.display = 'none';
+            successMsg.style.display = 'none';
+
+            // Collect OTP
+            const otp = ['otp1', 'otp2', 'otp3', 'otp4', 'otp5', 'otp6']
+                .map(id => document.getElementById(id).value)
+                .join('');
+
+            if (otp.length !== 6) {
+                errorMsg.textContent = 'Please enter the complete 6-digit OTP';
+                errorMsg.style.display = 'block';
+                return;
+            }
+
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verifying...';
+            btn.disabled = true;
+
+            try {
+                const result = await verifyOTP(currentIdentifier, otp, currentMode);
+
+                if (result.success) {
+                    successMsg.textContent = 'Login successful! Redirecting...';
+                    successMsg.style.display = 'block';
+                    
+                    // Success animation
+                    document.querySelectorAll('.otp-box').forEach(box => {
+                        box.classList.add('success');
+                    });
+
+                    // Redirect to intended page or profile
+                    setTimeout(() => {
+                        const redirectTo = sessionStorage.getItem('redirectAfterLogin') || '/profile.html';
+                        sessionStorage.removeItem('redirectAfterLogin');
+                        window.location.href = redirectTo;
+                    }, 1500);
+                } else {
+                    errorMsg.textContent = result.error || 'Invalid OTP. Please try again.';
+                    errorMsg.style.display = 'block';
+                    
+                    // Error animation
+                    document.querySelectorAll('.otp-box').forEach(box => {
+                        box.classList.add('error');
+                        box.classList.remove('success');
+                    });
+                    
+                    setTimeout(() => {
+                        document.querySelectorAll('.otp-box').forEach(box => {
+                            box.classList.remove('error');
+                            box.value = '';
+                        });
+                        document.getElementById('otp1').focus();
+                    }, 500);
+                    
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                }
+            } catch (error) {
+                console.error('Verify OTP error:', error);
+                errorMsg.textContent = 'An error occurred. Please try again.';
+                errorMsg.style.display = 'block';
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        }
+
+        // Add CSS for success/error states
+        const style = document.createElement('style');
+        style.textContent = `
+            .otp-box.success {
+                border-color: #27ae60;
+                background-color: #e8f5e9;
+            }
+            .otp-box.error {
+                border-color: #e74c3c;
+                background-color: #ffebee;
+                animation: shake 0.5s;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
 </body>
 </html>
 

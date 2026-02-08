@@ -6,9 +6,127 @@
     <title>My Profile | Vedic Origins</title>
     
     <link rel="stylesheet" href="style.css">
-    
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="assets/js/config.example.js"></script>
+    <script src="assets/js/auth.js"></script>
+    <script src="assets/js/require-auth.js"></script>
+    
+    <style>
+        .edit-form {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .edit-form.active {
+            display: block;
+        }
+        
+        .form-field {
+            margin-bottom: 20px;
+        }
+        
+        .form-field label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--dark);
+        }
+        
+        .form-field input,
+        .form-field textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        
+        .form-field input:focus,
+        .form-field textarea:focus {
+            border-color: var(--gold);
+            outline: none;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+        }
+        
+        .form-field input[readonly] {
+            background: #f5f5f5;
+            cursor: not-allowed;
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+        }
+        
+        .form-actions button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-save {
+            background: var(--gold);
+            color: white;
+        }
+        
+        .btn-save:hover {
+            background: #c4a035;
+            transform: translateY(-2px);
+        }
+        
+        .btn-cancel {
+            background: #f0f0f0;
+            color: #666;
+        }
+        
+        .btn-cancel:hover {
+            background: #e0e0e0;
+        }
+        
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            display: none;
+        }
+        
+        .loading-overlay.active {
+            display: flex;
+        }
+        
+        .loading-spinner {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+        }
+        
+        .loading-spinner i {
+            font-size: 3rem;
+            color: var(--gold);
+            margin-bottom: 15px;
+        }
+    </style>
 </head>
 <body>
     <!-- Preloader -->
@@ -45,60 +163,298 @@
         </ul>
     </div>
 
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>Loading...</p>
+        </div>
+    </div>
+
     <div class="profile-container">
         
-        <div class="profile-header">
-            <h1 style="color: #d4af37;">Namaste, Pure Soul 🙏</h1>
-            <p>+91 9876543210 <span style="background:#e8f5e9; color:#27ae60; padding:2px 8px; font-size:0.8rem; border-radius:10px;">Verified</span></p>
+        <div class="profile-header" id="profile-header">
+            <h1 style="color: #d4af37;">Namaste, <span id="user-name">Guest</span> 🙏</h1>
+            <p id="user-contact">Loading...</p>
         </div>
 
+        <!-- Profile Edit Form -->
         <div class="section-box">
-            <h3><i class="fas fa-box-open"></i> Your Orders</h3>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3><i class="fas fa-user"></i> My Profile</h3>
+                <button class="edit-btn" onclick="toggleEditForm()" id="toggle-edit-btn">
+                    <i class="fas fa-edit"></i> Edit Profile
+                </button>
+            </div>
             
-            <div class="order-card">
-                <div class="order-header">
-                    <span class="date">Ordered: 8 Feb 2026</span>
-                    <span class="status shipped">Shipped</span>
-                </div>
-                <div class="order-body">
-                    <img src="cow0.jpg" alt="Ghee" onerror="this.src='https://via.placeholder.com/60'">
-                    <div class="order-details">
-                        <h4>A2 Gir Cow Ghee (1 Litre)</h4>
-                        <p>₹4000 <span class="badge" style="background:#eee; color:#333;">UPI</span></p>
-                    </div>
-                </div>
-                <button class="track-btn" onclick="trackOrder('8 Feb 2026', 'A2 Gir Cow Ghee (1 Litre)')">Track Order</button>
+            <div id="profile-view">
+                <p><strong>Name:</strong> <span id="display-name">-</span></p>
+                <p><strong>Email:</strong> <span id="display-email">-</span></p>
+                <p><strong>Phone:</strong> <span id="display-phone">-</span></p>
             </div>
-
-            <div class="order-card">
-                <div class="order-header">
-                    <span class="date">Ordered: 15 Jan 2026</span>
-                    <span class="status delivered">Delivered</span>
+            
+            <div class="edit-form" id="edit-form">
+                <div class="form-field">
+                    <label for="edit-name">Full Name</label>
+                    <input type="text" id="edit-name" placeholder="Enter your full name">
                 </div>
-                <div class="order-body">
-                    <img src="buff0.jpg" alt="Ghee" onerror="this.src='https://via.placeholder.com/60'">
-                    <div class="order-details">
-                        <h4>Pure Buffalo Ghee (500ml)</h4>
-                        <p>₹1000 <span class="badge" style="background:#eee; color:#333;">COD</span></p>
-                    </div>
+                
+                <div class="form-field">
+                    <label for="edit-email">Email</label>
+                    <input type="email" id="edit-email" placeholder="your.email@example.com" readonly>
+                    <small style="color: #666;">Email from authentication cannot be changed</small>
                 </div>
-                <button class="track-btn" onclick="window.location.href='index.html#shop'">Buy Again</button>
+                
+                <div class="form-field">
+                    <label for="edit-phone">Phone</label>
+                    <input type="tel" id="edit-phone" placeholder="10-digit mobile number" readonly>
+                    <small style="color: #666;">Phone from authentication cannot be changed</small>
+                </div>
+                
+                <h4 style="margin-top: 25px; margin-bottom: 15px;">Default Shipping Address</h4>
+                
+                <div class="form-field">
+                    <label for="edit-landmark">Landmark</label>
+                    <input type="text" id="edit-landmark" placeholder="e.g., Near ABC Mall">
+                </div>
+                
+                <div class="form-field">
+                    <label for="edit-area">Area / Street</label>
+                    <input type="text" id="edit-area" placeholder="e.g., MG Road, Sector 5">
+                </div>
+                
+                <div class="form-field">
+                    <label for="edit-city">City</label>
+                    <input type="text" id="edit-city" placeholder="e.g., Mumbai, Delhi">
+                </div>
+                
+                <div class="form-field">
+                    <label for="edit-state">State</label>
+                    <input type="text" id="edit-state" placeholder="e.g., Maharashtra">
+                </div>
+                
+                <div class="form-field">
+                    <label for="edit-pincode">Pincode</label>
+                    <input type="text" id="edit-pincode" placeholder="6-digit pincode" maxlength="6">
+                </div>
+                
+                <div class="form-actions">
+                    <button class="btn-save" onclick="saveProfile()">
+                        <i class="fas fa-check"></i> Save Changes
+                    </button>
+                    <button class="btn-cancel" onclick="toggleEditForm()">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                </div>
             </div>
         </div>
 
-        <div class="section-box">
-            <h3><i class="fas fa-map-marker-alt"></i> Saved Address</h3>
-            <div class="address-card">
-                <p><strong>Home</strong></p>
-                <p>123, Village Road, Near Old Temple,</p>
-                <p>Guna, Madhya Pradesh - 473001</p>
-                <button class="edit-btn" style="margin-top:10px;" onclick="editAddress()">Edit Address</button>
+        <div class="section-box" id="orders-section">
+            <h3><i class="fas fa-box-open"></i> Your Orders</h3>
+            <div id="orders-list">
+                <p style="text-align: center; color: #666;">Loading orders...</p>
             </div>
         </div>
 
     </div>
 
+    <script src="assets/js/config.example.js"></script>
+    <script src="assets/js/auth.js"></script>
+    <script src="assets/js/profile.js"></script>
     <script src="script.js"></script>
+    <script>
+        let currentProfile = null;
+
+        // Initialize profile page
+        async function initProfilePage() {
+            showLoading(true);
+
+            // Check if user is logged in
+            const session = await getSession();
+            if (!session) {
+                window.location.href = '/login.html';
+                return;
+            }
+
+            // Fetch user data
+            const user = await getCurrentUser();
+            const profile = await getUserProfile();
+            const orders = await getUserOrders(5);
+
+            if (user) {
+                // Update header
+                const userName = profile?.name || user.email?.split('@')[0] || 'Guest';
+                document.getElementById('user-name').textContent = userName;
+                
+                const contactInfo = [];
+                if (user.phone) contactInfo.push(user.phone);
+                if (user.email) contactInfo.push(user.email);
+                document.getElementById('user-contact').textContent = contactInfo.join(' • ') || 'No contact info';
+
+                // Update profile view
+                document.getElementById('display-name').textContent = profile?.name || '-';
+                document.getElementById('display-email').textContent = user.email || profile?.email || '-';
+                document.getElementById('display-phone').textContent = user.phone || profile?.phone || '-';
+
+                // Store current profile
+                currentProfile = profile;
+            }
+
+            // Display orders
+            displayOrders(orders);
+
+            showLoading(false);
+        }
+
+        // Toggle edit form
+        function toggleEditForm() {
+            const form = document.getElementById('edit-form');
+            const view = document.getElementById('profile-view');
+            const btn = document.getElementById('toggle-edit-btn');
+            
+            if (form.classList.contains('active')) {
+                form.classList.remove('active');
+                view.style.display = 'block';
+                btn.innerHTML = '<i class="fas fa-edit"></i> Edit Profile';
+            } else {
+                // Populate form with current data
+                populateEditForm();
+                form.classList.add('active');
+                view.style.display = 'none';
+                btn.innerHTML = '<i class="fas fa-eye"></i> View Profile';
+            }
+        }
+
+        // Populate edit form with current profile data
+        async function populateEditForm() {
+            const user = await getCurrentUser();
+            const profile = currentProfile;
+
+            document.getElementById('edit-name').value = profile?.name || '';
+            document.getElementById('edit-email').value = user?.email || profile?.email || '';
+            document.getElementById('edit-phone').value = user?.phone || profile?.phone || '';
+
+            // Address fields
+            const address = profile?.default_address || {};
+            document.getElementById('edit-landmark').value = address.landmark || '';
+            document.getElementById('edit-area').value = address.line1 || '';
+            document.getElementById('edit-city').value = address.city || '';
+            document.getElementById('edit-state').value = address.state || '';
+            document.getElementById('edit-pincode').value = address.pincode || '';
+        }
+
+        // Save profile changes
+        async function saveProfile() {
+            showLoading(true);
+
+            const updates = {
+                name: document.getElementById('edit-name').value.trim(),
+                default_address: {
+                    landmark: document.getElementById('edit-landmark').value.trim(),
+                    line1: document.getElementById('edit-area').value.trim(),
+                    city: document.getElementById('edit-city').value.trim(),
+                    state: document.getElementById('edit-state').value.trim(),
+                    pincode: document.getElementById('edit-pincode').value.trim()
+                }
+            };
+
+            const success = await updateUserProfile(updates);
+
+            if (success) {
+                // Refresh profile data
+                currentProfile = await getUserProfile();
+                
+                // Update display
+                document.getElementById('display-name').textContent = currentProfile?.name || '-';
+                if (currentProfile?.name) {
+                    document.getElementById('user-name').textContent = currentProfile.name;
+                }
+
+                // Close form
+                toggleEditForm();
+
+                alert('Profile updated successfully!');
+            } else {
+                alert('Failed to update profile. Please try again.');
+            }
+
+            showLoading(false);
+        }
+
+        // Display orders
+        function displayOrders(orders) {
+            const container = document.getElementById('orders-list');
+            
+            if (!orders || orders.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #666;">No orders yet. Start shopping!</p>';
+                return;
+            }
+
+            container.innerHTML = orders.map(order => {
+                const firstItem = order.order_items?.[0];
+                const itemCount = order.order_items?.length || 0;
+                
+                return `
+                    <div class="order-card">
+                        <div class="order-header">
+                            <span class="date">Ordered: ${formatDate(order.created_at)}</span>
+                            <span class="${getOrderStatusClass(order.status)}">${getOrderStatusText(order.status)}</span>
+                        </div>
+                        <div class="order-body">
+                            <img src="${getProductImage(firstItem?.product_id || 'cow-1l')}" alt="Product" onerror="this.src='cow0.jpg'">
+                            <div class="order-details">
+                                <h4>${firstItem?.name || 'Order Items'}</h4>
+                                ${itemCount > 1 ? `<p style="color: #666;">+${itemCount - 1} more item(s)</p>` : ''}
+                                <p>₹${Number(order.total).toLocaleString('en-IN')} 
+                                   <span class="badge" style="background:#eee; color:#333;">${order.payment_method === 'cod' ? 'COD' : 'Prepaid'}</span>
+                                </p>
+                            </div>
+                        </div>
+                        <button class="track-btn" onclick="viewOrderDetails('${order.id}')">View Details</button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Get product image from product ID
+        function getProductImage(productId) {
+            if (productId.startsWith('cow-')) {
+                return 'cow0.jpg';
+            } else if (productId.startsWith('buffalo-')) {
+                return 'buff0.jpg';
+            }
+            return 'cow0.jpg';
+        }
+
+        // View order details
+        function viewOrderDetails(orderId) {
+            // Could navigate to an order details page
+            alert(`Order ID: ${orderId}\n\nOrder details page coming soon!`);
+        }
+
+        // Show/hide loading overlay
+        function showLoading(show) {
+            const overlay = document.getElementById('loading-overlay');
+            if (show) {
+                overlay.classList.add('active');
+            } else {
+                overlay.classList.remove('active');
+            }
+        }
+
+        // Logout function
+        async function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                const success = await signOut();
+                if (success) {
+                    window.location.href = '/login.html';
+                }
+            }
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', initProfilePage);
+    </script>
 
 </body>
 </html>

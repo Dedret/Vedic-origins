@@ -90,9 +90,9 @@
                     <option value="3">1 Litre (Family Jar)</option>
                 </select>
 
-                <a id="pay-link" href="#">
-                    <button class="buy-btn ripple-container">ORDER NOW <i class="fas fa-arrow-right"></i></button>
-                </a>
+                <button class="buy-btn ripple-container" onclick="addToCartFromHome()">
+                    <i class="fas fa-cart-plus"></i> ADD TO CART
+                </button>
                 
                 <p class="secure-text"><i class="fas fa-lock"></i> Secure Checkout</p>
             </div>
@@ -157,5 +157,40 @@
     </footer>
 
     <script src="script.js"></script>
+    <script src="assets/js/cart.js"></script>
+    <script>
+        // Add to cart from home page
+        function addToCartFromHome() {
+            const qtyIndex = document.getElementById('qty').value;
+            const product = data[currentType];
+            const sizeLabels = ["250ml", "500ml", "750ml", "1 Litre"];
+            const selectedSize = sizeLabels[qtyIndex];
+            const fullName = `Vedic Origins ${product.title} - ${selectedSize}`;
+            const currentPrice = product.sale[qtyIndex];
+            
+            // Generate product ID
+            const productId = `${currentType}-${selectedSize.toLowerCase().replace(' ', '')}`;
+            
+            // Add to cart
+            addItem(productId, fullName, currentPrice, 1);
+            
+            // Visual feedback
+            const btn = document.querySelector('.buy-btn');
+            const originalContent = btn.innerHTML;
+            
+            btn.innerHTML = '<i class="fas fa-check"></i> ADDED TO CART!';
+            btn.style.background = '#27ae60';
+            
+            setTimeout(() => {
+                btn.innerHTML = originalContent;
+                btn.style.background = '';
+                
+                // Ask user if they want to continue or go to cart
+                if (confirm('Product added to cart! Go to cart now?')) {
+                    window.location.href = 'cart.html';
+                }
+            }, 1500);
+        }
+    </script>
 </body>
 </html>
